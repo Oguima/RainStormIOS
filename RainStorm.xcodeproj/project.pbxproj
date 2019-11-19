@@ -15,6 +15,10 @@
 		B66955522384477300892EA8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B66955502384477300892EA8 /* LaunchScreen.storyboard */; };
 		B669555D2384477300892EA8 /* RainStormTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B669555C2384477300892EA8 /* RainStormTests.swift */; };
 		B66955682384477300892EA8 /* RainStormUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66955672384477300892EA8 /* RainStormUITests.swift */; };
+		B669557E238495AC00892EA8 /* DayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B669557D238495AC00892EA8 /* DayViewController.swift */; };
+		B66955812384963E00892EA8 /* WeekViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66955802384963E00892EA8 /* WeekViewController.swift */; };
+		B6695584238497E700892EA8 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6695583238497E700892EA8 /* UIViewController.swift */; };
+		B66955862384985D00892EA8 /* UIStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66955852384985D00892EA8 /* UIStoryboard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +53,10 @@
 		B66955632384477300892EA8 /* RainStormUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RainStormUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B66955672384477300892EA8 /* RainStormUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RainStormUITests.swift; sourceTree = "<group>"; };
 		B66955692384477300892EA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B669557D238495AC00892EA8 /* DayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayViewController.swift; sourceTree = "<group>"; };
+		B66955802384963E00892EA8 /* WeekViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekViewController.swift; sourceTree = "<group>"; };
+		B6695583238497E700892EA8 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
+		B66955852384985D00892EA8 /* UIStoryboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStoryboard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +107,7 @@
 		B66955442384477200892EA8 /* RainStorm */ = {
 			isa = PBXGroup;
 			children = (
+				B6695582238497CD00892EA8 /* Extensions */,
 				B669557A238448D400892EA8 /* Supporting Files */,
 				B6695579238448B000892EA8 /* Resources */,
 				B66955782384489900892EA8 /* Storyboards */,
@@ -138,6 +147,7 @@
 		B66955762384481300892EA8 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				B669557B2384956800892EA8 /* Weather View Controller */,
 				B66955772384482F00892EA8 /* Root View Controller */,
 			);
 			path = "View Controllers";
@@ -174,6 +184,40 @@
 				B66955692384477300892EA8 /* Info.plist */,
 			);
 			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B669557B2384956800892EA8 /* Weather View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				B669557F2384961500892EA8 /* Week View Controller */,
+				B669557C2384957C00892EA8 /* Day View Controller */,
+			);
+			path = "Weather View Controller";
+			sourceTree = "<group>";
+		};
+		B669557C2384957C00892EA8 /* Day View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				B669557D238495AC00892EA8 /* DayViewController.swift */,
+			);
+			path = "Day View Controller";
+			sourceTree = "<group>";
+		};
+		B669557F2384961500892EA8 /* Week View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				B66955802384963E00892EA8 /* WeekViewController.swift */,
+			);
+			path = "Week View Controller";
+			sourceTree = "<group>";
+		};
+		B6695582238497CD00892EA8 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				B6695583238497E700892EA8 /* UIViewController.swift */,
+				B66955852384985D00892EA8 /* UIStoryboard.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -307,9 +351,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B66955812384963E00892EA8 /* WeekViewController.swift in Sources */,
 				B669554A2384477200892EA8 /* RootViewController.swift in Sources */,
+				B6695584238497E700892EA8 /* UIViewController.swift in Sources */,
 				B66955462384477200892EA8 /* AppDelegate.swift in Sources */,
 				B66955482384477200892EA8 /* SceneDelegate.swift in Sources */,
+				B669557E238495AC00892EA8 /* DayViewController.swift in Sources */,
+				B66955862384985D00892EA8 /* UIStoryboard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
