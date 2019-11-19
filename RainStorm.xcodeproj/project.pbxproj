@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		B66955462384477200892EA8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66955452384477200892EA8 /* AppDelegate.swift */; };
 		B66955482384477200892EA8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66955472384477200892EA8 /* SceneDelegate.swift */; };
-		B669554A2384477200892EA8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66955492384477200892EA8 /* ViewController.swift */; };
+		B669554A2384477200892EA8 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66955492384477200892EA8 /* RootViewController.swift */; };
 		B669554D2384477200892EA8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B669554B2384477200892EA8 /* Main.storyboard */; };
 		B669554F2384477300892EA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B669554E2384477300892EA8 /* Assets.xcassets */; };
 		B66955522384477300892EA8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B66955502384477300892EA8 /* LaunchScreen.storyboard */; };
@@ -38,7 +38,7 @@
 		B66955422384477200892EA8 /* RainStorm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RainStorm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B66955452384477200892EA8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B66955472384477200892EA8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		B66955492384477200892EA8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		B66955492384477200892EA8 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		B669554C2384477200892EA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B669554E2384477300892EA8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B66955512384477300892EA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -99,12 +99,12 @@
 		B66955442384477200892EA8 /* RainStorm */ = {
 			isa = PBXGroup;
 			children = (
-				B66955452384477200892EA8 /* AppDelegate.swift */,
+				B669557A238448D400892EA8 /* Supporting Files */,
+				B6695579238448B000892EA8 /* Resources */,
+				B66955782384489900892EA8 /* Storyboards */,
+				B66955762384481300892EA8 /* View Controllers */,
+				B6695575238447CF00892EA8 /* Application Delegate */,
 				B66955472384477200892EA8 /* SceneDelegate.swift */,
-				B66955492384477200892EA8 /* ViewController.swift */,
-				B669554B2384477200892EA8 /* Main.storyboard */,
-				B669554E2384477300892EA8 /* Assets.xcassets */,
-				B66955502384477300892EA8 /* LaunchScreen.storyboard */,
 				B66955532384477300892EA8 /* Info.plist */,
 			);
 			path = RainStorm;
@@ -123,9 +123,57 @@
 			isa = PBXGroup;
 			children = (
 				B66955672384477300892EA8 /* RainStormUITests.swift */,
-				B66955692384477300892EA8 /* Info.plist */,
 			);
 			path = RainStormUITests;
+			sourceTree = "<group>";
+		};
+		B6695575238447CF00892EA8 /* Application Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				B66955452384477200892EA8 /* AppDelegate.swift */,
+			);
+			path = "Application Delegate";
+			sourceTree = "<group>";
+		};
+		B66955762384481300892EA8 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				B66955772384482F00892EA8 /* Root View Controller */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		B66955772384482F00892EA8 /* Root View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				B66955492384477200892EA8 /* RootViewController.swift */,
+			);
+			path = "Root View Controller";
+			sourceTree = "<group>";
+		};
+		B66955782384489900892EA8 /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				B669554B2384477200892EA8 /* Main.storyboard */,
+				B66955502384477300892EA8 /* LaunchScreen.storyboard */,
+			);
+			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		B6695579238448B000892EA8 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B669554E2384477300892EA8 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		B669557A238448D400892EA8 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				B66955692384477300892EA8 /* Info.plist */,
+			);
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,7 +307,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B669554A2384477200892EA8 /* ViewController.swift in Sources */,
+				B669554A2384477200892EA8 /* RootViewController.swift in Sources */,
 				B66955462384477200892EA8 /* AppDelegate.swift in Sources */,
 				B66955482384477200892EA8 /* SceneDelegate.swift in Sources */,
 			);
@@ -444,7 +492,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.guimagames.ios.RainStorm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -462,7 +510,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.guimagames.ios.RainStorm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
