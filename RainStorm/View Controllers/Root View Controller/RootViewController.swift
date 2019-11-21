@@ -98,16 +98,24 @@ final class RootViewController: UIViewController {
      
      */
     private func fetchWeatherData() {
-        guard let baseUrl = URL(string: "https://api.darksky.net/forecast/") else {
+        /*guard let baseUrl = URL(string: "https://api.darksky.net/forecast/") else {
             return
         }
         
         //Secret Key: https://darksky.net/dev/account
         let authenticatedBaseUrl = baseUrl.appendingPathComponent("d338cfc01c45f8ae583757dba7c77dbc")
         
-        let url = authenticatedBaseUrl.appendingPathComponent("\(37.335114),\(-122.008928)")
+        //let url = authenticatedBaseUrl.appendingPathComponent("\(37.335114),\(-122.008928)")
+        */
         
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
+        // Create URL
+        //let weatherRequest = WeatherRequest(baseUrl: authenticatedBaseUrl, latitude: 37.335114, longitude: -122.008928)
+        
+        //let weatherRequest = WeatherRequest(baseUrl: WeatherService.authenticatedBaseUrl, latitude: Defaults.latitude , longitude: Defaults.longitude)
+        
+        let weatherRequest = WeatherRequest(baseUrl: WeatherService.authenticatedBaseUrl, location: Defaults.location)
+        
+        URLSession.shared.dataTask(with: weatherRequest.url) { (data, response, error) in
             if let error = error {
                 print("Request Did Fail (\(error))")
             }
