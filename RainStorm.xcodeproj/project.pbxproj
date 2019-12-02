@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B62A883C238ED9E2006241C3 /* RootViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62A883B238ED9E2006241C3 /* RootViewModel.swift */; };
 		B66955462384477200892EA8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66955452384477200892EA8 /* AppDelegate.swift */; };
 		B66955482384477200892EA8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66955472384477200892EA8 /* SceneDelegate.swift */; };
 		B669554A2384477200892EA8 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66955492384477200892EA8 /* RootViewController.swift */; };
@@ -41,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B62A883B238ED9E2006241C3 /* RootViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewModel.swift; sourceTree = "<group>"; };
 		B66955422384477200892EA8 /* RainStorm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RainStorm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B66955452384477200892EA8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B66955472384477200892EA8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -88,6 +90,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B62A883A238ED9C5006241C3 /* View Models */ = {
+			isa = PBXGroup;
+			children = (
+				B62A883B238ED9E2006241C3 /* RootViewModel.swift */,
+			);
+			path = "View Models";
+			sourceTree = "<group>";
+		};
 		B66955392384477200892EA8 = {
 			isa = PBXGroup;
 			children = (
@@ -162,6 +172,7 @@
 		B66955772384482F00892EA8 /* Root View Controller */ = {
 			isa = PBXGroup;
 			children = (
+				B62A883A238ED9C5006241C3 /* View Models */,
 				B66955492384477200892EA8 /* RootViewController.swift */,
 			);
 			path = "Root View Controller";
@@ -373,6 +384,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B62A883C238ED9E2006241C3 /* RootViewModel.swift in Sources */,
 				B66955892386B9A500892EA8 /* WeatherRequest.swift in Sources */,
 				B66955812384963E00892EA8 /* WeekViewController.swift in Sources */,
 				B669554A2384477200892EA8 /* RootViewController.swift in Sources */,
@@ -557,6 +569,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HB54SB8ZZ9;
 				INFOPLIST_FILE = RainStorm/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -575,6 +588,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HB54SB8ZZ9;
 				INFOPLIST_FILE = RainStorm/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

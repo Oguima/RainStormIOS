@@ -12,6 +12,16 @@ final class RootViewController: UIViewController {
 
     // Mark: Properties
     
+    var viewModel: RootViewModel? {
+        didSet {
+            guard let viewModel = viewModel else {
+                return
+            }
+            setupViewModel(with: viewModel)
+            
+        }
+    }
+    
     private let dayViewController: DayViewController = {
         guard let dayViewController = UIStoryboard.main.instantiateViewController(withIdentifier: DayViewController.storyboardIdentifier) as? DayViewController else {
             fatalError("Unable to Instanciate Day View Controller")
@@ -39,7 +49,8 @@ final class RootViewController: UIViewController {
         // Do any additional setup after loading the view.
         setupChildViewControllers()
         
-        fetchWeatherData()
+        //fetchWeatherData()
+       // print(viewModel ?? "No view Model Inhected")
     }
     
     // Mark: Helpers
@@ -64,68 +75,16 @@ final class RootViewController: UIViewController {
         weekViewController.didMove(toParent: self)
     }
     
-    /*
-     
-     Response: <NSHTTPURLResponse: 0x600003d38fa0> { URL: https://api.darksky.net/forecast/d338cfc01c45f8ae583757dba7c77dbc/37.335114,-122.008928 } { Status Code: 200, Headers {
-         "Cache-Control" =     (
-             "max-age=60"
-         );
-         "Content-Encoding" =     (
-             gzip
-         );
-         "Content-Type" =     (
-             "application/json; charset=utf-8"
-         );
-         Date =     (
-             "Wed, 20 Nov 2019 16:45:17 GMT"
-         );
-         Expires =     (
-             "Wed, 20 Nov 2019 16:46:17 +0000"
-         );
-         Vary =     (
-             "Accept-Encoding"
-         );
-         "x-authentication-time" =     (
-             544ms
-         );
-         "x-forecast-api-calls" =     (
-             1
-         );
-         "x-response-time" =     (
-             "91.203ms"
-         );
-     } }
-     
-     */
-    private func fetchWeatherData() {
-        /*guard let baseUrl = URL(string: "https://api.darksky.net/forecast/") else {
-            return
-        }
-        
-        //Secret Key: https://darksky.net/dev/account
-        let authenticatedBaseUrl = baseUrl.appendingPathComponent("d338cfc01c45f8ae583757dba7c77dbc")
-        
-        //let url = authenticatedBaseUrl.appendingPathComponent("\(37.335114),\(-122.008928)")
-        */
-        
-        // Create URL
-        //let weatherRequest = WeatherRequest(baseUrl: authenticatedBaseUrl, latitude: 37.335114, longitude: -122.008928)
-        
-        //let weatherRequest = WeatherRequest(baseUrl: WeatherService.authenticatedBaseUrl, latitude: Defaults.latitude , longitude: Defaults.longitude)
-        
-        let weatherRequest = WeatherRequest(baseUrl: WeatherService.authenticatedBaseUrl, location: Defaults.location)
-        
-        URLSession.shared.dataTask(with: weatherRequest.url) { (data, response, error) in
+    private func setupViewModel(with viewModel: RootViewModel) {
+        viewModel.didFetchWeaterData = { (data, error) in
             if let error = error {
-                print("Request Did Fail (\(error))")
+                print("Unable to fetch Weather data (\(error))")
             }
-            else if let response = response
-            {
-                print("Response: \(response)" )
+            else if let data = data {
+                print(data)
             }
-        }.resume() //Para enviar de verdade...
+        }
     }
-
 }
 
 extension RootViewController {
