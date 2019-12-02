@@ -10,7 +10,13 @@ import Foundation
 
 class RootViewModel {
     
-    typealias DidFetchWeatherDataCompletion = (Data?, Error?) -> Void
+    enum WeatherDataError: Error {
+        case noWeatherDataAvailable
+    }
+    
+    //typealias DidFetchWeatherDataCompletion = (Data?, Error?) -> Void
+    //typealias DidFetchWeatherDataCompletion = (DarkSkyResponse?, Error?) -> Void
+    typealias DidFetchWeatherDataCompletion = (DarkSkyResponse?, WeatherDataError?) -> Void
     var didFetchWeaterData: DidFetchWeatherDataCompletion?
     
     init() {
@@ -70,14 +76,35 @@ class RootViewModel {
         let weatherRequest = WeatherRequest(baseUrl: WeatherService.authenticatedBaseUrl, location: Defaults.location)
         
         URLSession.shared.dataTask(with: weatherRequest.url) { [weak self] (data, response, error) in
+            
+            //Para melhorar o tratamento de erro...
+            if let response = response as? HTTPURLResponse {
+                print("Status Code: \(response.statusCode)")
+            }
+            
             if let error = error {
                 //print("Request Did Fail (\(error))")
-                self?.didFetchWeaterData?(nil, error)
+                print("Unable to Fetch Weather Data (\(error))")
+                self?.didFetchWeaterData?(nil, .noWeatherDataAvailable)
             } else if let data = data {
-                self?.didFetchWeaterData?(data, nil)
+                
+                //Teste sem codable... só para ver se funciona...
+                //self?.didFetchWeaterData?(data, nil) //OK
+                //MARK: Estrutura de leitura Codable, Json.
+                let decoder = JSONDecoder()
+                
+                do {
+                    let darkSkyResponse = try decoder.decode(DarkSkyResponse.self, from: data)
+                    
+                    self?.didFetchWeaterData?(darkSkyResponse, nil)
+                } catch {
+                    print ("Unable to decode JSON Response \(error)")
+                    
+                    self?.didFetchWeaterData?(nil, .noWeatherDataAvailable)
+                }
             } else {
                 //print("Response: \(response)" )
-                self?.didFetchWeaterData?(nil, nil)
+                self?.didFetchWeaterData?(nil, .noWeatherDataAvailable)
             }
         }.resume() //Para enviar de verdade...
     }

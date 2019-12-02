@@ -23,6 +23,6 @@ struct WeatherRequest {
     }
     
     var url: URL {
-        return baseUrl.appendingPathComponent("\(latitude),\(longitude))")
+        return baseUrl.appendingPathComponent("\(latitude),\(longitude)")
     }
 }

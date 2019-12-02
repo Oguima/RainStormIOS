@@ -22,6 +22,7 @@
 		B66955862384985D00892EA8 /* UIStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66955852384985D00892EA8 /* UIStoryboard.swift */; };
 		B66955892386B9A500892EA8 /* WeatherRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66955882386B9A500892EA8 /* WeatherRequest.swift */; };
 		B669558C2386BB1C00892EA8 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B669558B2386BB1C00892EA8 /* Configuration.swift */; };
+		B687E9B3239596F50003A0C8 /* DarkSkyResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B687E9B2239596F50003A0C8 /* DarkSkyResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		B66955852384985D00892EA8 /* UIStoryboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStoryboard.swift; sourceTree = "<group>"; };
 		B66955882386B9A500892EA8 /* WeatherRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherRequest.swift; sourceTree = "<group>"; };
 		B669558B2386BB1C00892EA8 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
+		B687E9B2239596F50003A0C8 /* DarkSkyResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkSkyResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -241,6 +243,7 @@
 			isa = PBXGroup;
 			children = (
 				B66955882386B9A500892EA8 /* WeatherRequest.swift */,
+				B687E9B2239596F50003A0C8 /* DarkSkyResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -388,6 +391,7 @@
 				B66955892386B9A500892EA8 /* WeatherRequest.swift in Sources */,
 				B66955812384963E00892EA8 /* WeekViewController.swift in Sources */,
 				B669554A2384477200892EA8 /* RootViewController.swift in Sources */,
+				B687E9B3239596F50003A0C8 /* DarkSkyResponse.swift in Sources */,
 				B669558C2386BB1C00892EA8 /* Configuration.swift in Sources */,
 				B6695584238497E700892EA8 /* UIViewController.swift in Sources */,
 				B66955462384477200892EA8 /* AppDelegate.swift in Sources */,

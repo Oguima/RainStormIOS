@@ -10,8 +10,13 @@ import UIKit
 
 final class RootViewController: UIViewController {
 
+    private enum AlertType {
+        case noWeatherDataAvailable
+    }
+    
     // Mark: Properties
     
+    //MARK: Quando a aplicação é aberta, no SceneDelegate, ele instancia...
     var viewModel: RootViewModel? {
         didSet {
             guard let viewModel = viewModel else {
@@ -76,15 +81,42 @@ final class RootViewController: UIViewController {
     }
     
     private func setupViewModel(with viewModel: RootViewModel) {
-        viewModel.didFetchWeaterData = { (data, error) in
-            if let error = error {
-                print("Unable to fetch Weather data (\(error))")
+        viewModel.didFetchWeaterData = { [weak self] (data, error) in
+            if let _ = error { //Não preciso do erro
+                //print("Unable to fetch Weather data (\(error))")
+                self?.presentAlert(of: .noWeatherDataAvailable)
             }
             else if let data = data {
                 print(data)
+            } else {
+                //Sem dados...
+                self?.presentAlert(of: .noWeatherDataAvailable)
             }
         }
     }
+    
+    private func presentAlert(of alertType: AlertType) {
+        let title: String
+        let message: String
+        
+        switch alertType {
+            case .noWeatherDataAvailable:
+                title = "Unable to Fetch Weather Data"
+                message = "The application is unable to fetch weather data. Please make sure your devide is connected over Wi-fi or celular."
+            default:
+                title = "Erro desconhecido."
+                message = "Erro desconhecido."
+        }
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true)
+    }
+    
+    
 }
 
 extension RootViewController {
