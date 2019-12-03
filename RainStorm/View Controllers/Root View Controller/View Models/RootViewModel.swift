@@ -16,7 +16,10 @@ class RootViewModel {
     
     //typealias DidFetchWeatherDataCompletion = (Data?, Error?) -> Void
     //typealias DidFetchWeatherDataCompletion = (DarkSkyResponse?, Error?) -> Void
-    typealias DidFetchWeatherDataCompletion = (DarkSkyResponse?, WeatherDataError?) -> Void
+    
+    //typealias DidFetchWeatherDataCompletion = (DarkSkyResponse?, WeatherDataError?) -> Void
+    
+    typealias DidFetchWeatherDataCompletion = (WeatherData?, WeatherDataError?) -> Void
     var didFetchWeaterData: DidFetchWeatherDataCompletion?
     
     init() {
@@ -95,6 +98,9 @@ class RootViewModel {
                 
                 do {
                     let darkSkyResponse = try decoder.decode(DarkSkyResponse.self, from: data)
+                    
+                    print("---- Original Response ---")
+                    print (darkSkyResponse)
                     
                     self?.didFetchWeaterData?(darkSkyResponse, nil)
                 } catch {

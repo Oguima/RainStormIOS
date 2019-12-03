@@ -15,21 +15,15 @@ struct DarkSkyResponse: Codable {
         let icon: String
         let summary: String
         let windSpeed: Double
-    }
-    
-    struct ConditionsCurrently: Codable {
-        let time: Date
-        let icon: String
-        let summary: String
-        let windSpeed: Double
-        let temperature: Double //Não tem no Daily :(
+        let temperature: Double  //Não tem no Daily :(
     }
 
     struct Daily: Codable {
-        let data: [Conditions]
+        let data: [CondictionsDayly]
 
-        struct Condictions: Codable {
+        struct CondictionsDayly: Codable {
             let time: Date
+            let summary: String
             let icon: String
             let windSpeed: Double
             let temperatureMin: Double
@@ -41,5 +35,26 @@ struct DarkSkyResponse: Codable {
     let longitude: Double
 
     let daily: Daily
-    let currently: ConditionsCurrently
+    let currently: Conditions
+}
+
+extension DarkSkyResponse: WeatherData {
+    
+    var forecast: [Daily.CondictionsDayly] { //[DailyCondictions] { //[RainStorm.DarkSkyResponse.Daily.CondictionsDayly] {
+        
+        return daily.data  as! [Daily.CondictionsDayly] //[DailyCondictions] //as! [RainStorm.DarkSkyResponse.Daily.CondictionsDayly]  //.data as! [DailyCondictions]
+    }
+    
+    var current: CurrentWeatherCondictions {
+        return currently
+    }
+    
+    /*var forecast: [ForecastWeatherCondictions] {
+        return daily.data as! [ForecastWeatherCondictions] //as! [ForecastWeatherCondictions]
+    }*/
+    
+}
+
+extension DarkSkyResponse.Conditions: CurrentWeatherCondictions {
+    
 }

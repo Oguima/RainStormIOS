@@ -81,13 +81,24 @@ final class RootViewController: UIViewController {
     }
     
     private func setupViewModel(with viewModel: RootViewModel) {
-        viewModel.didFetchWeaterData = { [weak self] (data, error) in
+        viewModel.didFetchWeaterData = { [weak self] (weatherData, error) in
             if let _ = error { //Não preciso do erro
                 //print("Unable to fetch Weather data (\(error))")
                 self?.presentAlert(of: .noWeatherDataAvailable)
             }
-            else if let data = data {
-                print(data)
+            else if let weatherData = weatherData { //as? DarkSkyResponse {
+                print(weatherData)
+                
+                //MARK: Importante: Neste ponto instancia a view model DayViewModel
+                let dayViewModel = DayViewModel(weatherData: weatherData.current)
+                
+                self?.dayViewController.viewModel = dayViewModel
+                
+                //MARK: Instancia a viewModel WeekViewModel
+                let weekViewModel = WeekViewModel(weatherData: weatherData.forecast)
+                self?.weekViewController.viewModel = weekViewModel
+                
+                
             } else {
                 //Sem dados...
                 self?.presentAlert(of: .noWeatherDataAvailable)
@@ -103,9 +114,6 @@ final class RootViewController: UIViewController {
             case .noWeatherDataAvailable:
                 title = "Unable to Fetch Weather Data"
                 message = "The application is unable to fetch weather data. Please make sure your devide is connected over Wi-fi or celular."
-            default:
-                title = "Erro desconhecido."
-                message = "Erro desconhecido."
         }
         
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
