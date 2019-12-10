@@ -162,6 +162,7 @@
 		B66955662384477300892EA8 /* RainStormUITests */ = {
 			isa = PBXGroup;
 			children = (
+				B66955692384477300892EA8 /* Info.plist */,
 				B66955672384477300892EA8 /* RainStormUITests.swift */,
 			);
 			path = RainStormUITests;
@@ -213,7 +214,6 @@
 		B669557A238448D400892EA8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				B66955692384477300892EA8 /* Info.plist */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
