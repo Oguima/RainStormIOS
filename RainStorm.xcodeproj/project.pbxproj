@@ -26,6 +26,9 @@
 		B687E9B623968D2D0003A0C8 /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B687E9B523968D2D0003A0C8 /* WeatherData.swift */; };
 		B687E9BA2396968E0003A0C8 /* DayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B687E9B92396968E0003A0C8 /* DayViewModel.swift */; };
 		B687E9BC239697400003A0C8 /* WeekViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B687E9BB239697400003A0C8 /* WeekViewModel.swift */; };
+		B6BA9342239EB82C00306334 /* Styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BA9341239EB82C00306334 /* Styles.swift */; };
+		B6BA9344239EC28B00306334 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BA9343239EC28B00306334 /* UIImage.swift */; };
+		B6BA934623A0076A00306334 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BA934523A0076A00306334 /* DateFormatter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +74,9 @@
 		B687E9B523968D2D0003A0C8 /* WeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
 		B687E9B92396968E0003A0C8 /* DayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayViewModel.swift; sourceTree = "<group>"; };
 		B687E9BB239697400003A0C8 /* WeekViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekViewModel.swift; sourceTree = "<group>"; };
+		B6BA9341239EB82C00306334 /* Styles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Styles.swift; sourceTree = "<group>"; };
+		B6BA9343239EC28B00306334 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
+		B6BA934523A0076A00306334 /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -244,6 +250,8 @@
 			children = (
 				B6695583238497E700892EA8 /* UIViewController.swift */,
 				B66955852384985D00892EA8 /* UIStoryboard.swift */,
+				B6BA9343239EC28B00306334 /* UIImage.swift */,
+				B6BA934523A0076A00306334 /* DateFormatter.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -261,6 +269,7 @@
 			isa = PBXGroup;
 			children = (
 				B669558B2386BB1C00892EA8 /* Configuration.swift */,
+				B6BA9341239EB82C00306334 /* Styles.swift */,
 			);
 			path = Configuration;
 			sourceTree = "<group>";
@@ -426,8 +435,11 @@
 				B66955812384963E00892EA8 /* WeekViewController.swift in Sources */,
 				B669554A2384477200892EA8 /* RootViewController.swift in Sources */,
 				B687E9B3239596F50003A0C8 /* DarkSkyResponse.swift in Sources */,
+				B6BA9342239EB82C00306334 /* Styles.swift in Sources */,
+				B6BA934623A0076A00306334 /* DateFormatter.swift in Sources */,
 				B669558C2386BB1C00892EA8 /* Configuration.swift in Sources */,
 				B6695584238497E700892EA8 /* UIViewController.swift in Sources */,
+				B6BA9344239EC28B00306334 /* UIImage.swift in Sources */,
 				B66955462384477200892EA8 /* AppDelegate.swift in Sources */,
 				B66955482384477200892EA8 /* SceneDelegate.swift in Sources */,
 				B669557E238495AC00892EA8 /* DayViewController.swift in Sources */,

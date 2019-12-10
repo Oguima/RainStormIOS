@@ -85,32 +85,39 @@ class RootViewModel {
                 print("Status Code: \(response.statusCode)")
             }
             
-            if let error = error {
-                //print("Request Did Fail (\(error))")
-                print("Unable to Fetch Weather Data (\(error))")
-                self?.didFetchWeaterData?(nil, .noWeatherDataAvailable)
-            } else if let data = data {
-                
-                //Teste sem codable... só para ver se funciona...
-                //self?.didFetchWeaterData?(data, nil) //OK
-                //MARK: Estrutura de leitura Codable, Json.
-                let decoder = JSONDecoder()
-                
-                do {
-                    let darkSkyResponse = try decoder.decode(DarkSkyResponse.self, from: data)
+            //Precisa enviar os dados na main thread: ....
+            DispatchQueue.main.async {
+                if let error = error {
+                    //print("Request Did Fail (\(error))")
+                    print("Unable to Fetch Weather Data (\(error))")
+                    self?.didFetchWeaterData?(nil, .noWeatherDataAvailable)
+                } else if let data = data {
                     
-                    print("---- Original Response ---")
-                    print (darkSkyResponse)
+                    //Teste sem codable... só para ver se funciona...
+                    //self?.didFetchWeaterData?(data, nil) //OK
+                    //MARK: Estrutura de leitura Codable, Json.
+                    let decoder = JSONDecoder()
                     
-                    self?.didFetchWeaterData?(darkSkyResponse, nil)
-                } catch {
-                    print ("Unable to decode JSON Response \(error)")
+                    //Ajuste da data...
+                    //decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)  //.secondsSince1970
+                    decoder.dateDecodingStrategy = .secondsSince1970
                     
+                    do {
+                        let darkSkyResponse = try decoder.decode(DarkSkyResponse.self, from: data)
+                        
+                        print("---- Original Response ---")
+                        print (darkSkyResponse)
+                        
+                        self?.didFetchWeaterData?(darkSkyResponse, nil)
+                    } catch {
+                        print ("Unable to decode JSON Response \(error)")
+                        
+                        self?.didFetchWeaterData?(nil, .noWeatherDataAvailable)
+                    }
+                } else {
+                    //print("Response: \(response)" )
                     self?.didFetchWeaterData?(nil, .noWeatherDataAvailable)
                 }
-            } else {
-                //print("Response: \(response)" )
-                self?.didFetchWeaterData?(nil, .noWeatherDataAvailable)
             }
         }.resume() //Para enviar de verdade...
     }
