@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B61298E623BFD51E00C3F6BD /* WeekDayTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61298E523BFD51E00C3F6BD /* WeekDayTableViewCell.swift */; };
+		B61298E823BFDC1500C3F6BD /* WeekDayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61298E723BFDC1500C3F6BD /* WeekDayViewModel.swift */; };
+		B61298EB23BFE42000C3F6BD /* WeekDayRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61298EA23BFE42000C3F6BD /* WeekDayRepresentable.swift */; };
 		B62A883C238ED9E2006241C3 /* RootViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62A883B238ED9E2006241C3 /* RootViewModel.swift */; };
 		B66955462384477200892EA8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66955452384477200892EA8 /* AppDelegate.swift */; };
 		B66955482384477200892EA8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66955472384477200892EA8 /* SceneDelegate.swift */; };
@@ -49,6 +52,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B61298E523BFD51E00C3F6BD /* WeekDayTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDayTableViewCell.swift; sourceTree = "<group>"; };
+		B61298E723BFDC1500C3F6BD /* WeekDayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDayViewModel.swift; sourceTree = "<group>"; };
+		B61298EA23BFE42000C3F6BD /* WeekDayRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDayRepresentable.swift; sourceTree = "<group>"; };
 		B62A883B238ED9E2006241C3 /* RootViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewModel.swift; sourceTree = "<group>"; };
 		B66955422384477200892EA8 /* RainStorm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RainStorm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B66955452384477200892EA8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -104,6 +110,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B61298E423BFD4D500C3F6BD /* Table View Cells */ = {
+			isa = PBXGroup;
+			children = (
+				B61298E523BFD51E00C3F6BD /* WeekDayTableViewCell.swift */,
+			);
+			path = "Table View Cells";
+			sourceTree = "<group>";
+		};
+		B61298E923BFE3FD00C3F6BD /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				B61298EA23BFE42000C3F6BD /* WeekDayRepresentable.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
 		B62A883A238ED9C5006241C3 /* View Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -239,6 +261,8 @@
 		B669557F2384961500892EA8 /* Week View Controller */ = {
 			isa = PBXGroup;
 			children = (
+				B61298E923BFE3FD00C3F6BD /* Protocols */,
+				B61298E423BFD4D500C3F6BD /* Table View Cells */,
 				B687E9B8239696700003A0C8 /* View Models */,
 				B66955802384963E00892EA8 /* WeekViewController.swift */,
 			);
@@ -294,6 +318,7 @@
 			isa = PBXGroup;
 			children = (
 				B687E9BB239697400003A0C8 /* WeekViewModel.swift */,
+				B61298E723BFDC1500C3F6BD /* WeekDayViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -429,6 +454,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B61298E823BFDC1500C3F6BD /* WeekDayViewModel.swift in Sources */,
 				B62A883C238ED9E2006241C3 /* RootViewModel.swift in Sources */,
 				B66955892386B9A500892EA8 /* WeatherRequest.swift in Sources */,
 				B687E9BA2396968E0003A0C8 /* DayViewModel.swift in Sources */,
@@ -441,11 +467,13 @@
 				B6695584238497E700892EA8 /* UIViewController.swift in Sources */,
 				B6BA9344239EC28B00306334 /* UIImage.swift in Sources */,
 				B66955462384477200892EA8 /* AppDelegate.swift in Sources */,
+				B61298E623BFD51E00C3F6BD /* WeekDayTableViewCell.swift in Sources */,
 				B66955482384477200892EA8 /* SceneDelegate.swift in Sources */,
 				B669557E238495AC00892EA8 /* DayViewController.swift in Sources */,
 				B687E9B623968D2D0003A0C8 /* WeatherData.swift in Sources */,
 				B687E9BC239697400003A0C8 /* WeekViewModel.swift in Sources */,
 				B66955862384985D00892EA8 /* UIStoryboard.swift in Sources */,
+				B61298EB23BFE42000C3F6BD /* WeekDayRepresentable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

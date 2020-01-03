@@ -11,6 +11,14 @@ import Foundation
 struct WeekViewModel {
     
     //let weatherData: [RainStorm.DarkSkyResponse.Daily.CondictionsDayly] //[ForecastWeatherCondictions]
-    let weatherData: [DarkSkyResponse.Daily.CondictionsDayly]
+    let weatherData: [DarkSkyResponse.Daily.CondictionsDayly] //[ForecastWeatherCondictions]
+    
+    var numberOfDays: Int {
+        return weatherData.count
+    }
+    
+    func viewModel(for index: Int) -> weekDayViewModel {
+        return weekDayViewModel(weatherData: weatherData[index])
+    }
     
 }
