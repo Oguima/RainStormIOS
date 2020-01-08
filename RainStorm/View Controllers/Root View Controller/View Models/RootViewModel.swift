@@ -7,10 +7,13 @@
 //
 
 import Foundation
+import CoreLocation
 
-class RootViewModel {
+class RootViewModel: NSObject
+{
     
     enum WeatherDataError: Error {
+        case notAuthorizedToRequestLocation
         case noWeatherDataAvailable
     }
     
@@ -18,12 +21,26 @@ class RootViewModel {
     //typealias DidFetchWeatherDataCompletion = (DarkSkyResponse?, Error?) -> Void
     
     //typealias DidFetchWeatherDataCompletion = (DarkSkyResponse?, WeatherDataError?) -> Void
-    
     typealias DidFetchWeatherDataCompletion = (WeatherData?, WeatherDataError?) -> Void
     var didFetchWeaterData: DidFetchWeatherDataCompletion?
     
-    init() {
-       fetchWeatherData()
+    private lazy var locationManager: CLLocationManager = {
+       let locationManager = CLLocationManager()
+        locationManager.delegate = self
+        return locationManager
+    }()
+    
+    
+    override init() {
+        super.init()
+        
+        fetchWeatherData(for: Defaults.location)
+       fetchLocation()
+    }
+    
+    private func fetchLocation() {
+        //Adicionar no info.plist: Privacy - Location Always and When In Use Usage Description (addRow)
+        locationManager.requestLocation() //Necessita de permissão do usuário... (Ajustar info.plist...)
     }
     
     //MARK: -
@@ -60,7 +77,7 @@ class RootViewModel {
      } }
      
      */
-    private func fetchWeatherData() {
+    private func fetchWeatherData(for location: CLLocation) {
         /*guard let baseUrl = URL(string: "https://api.darksky.net/forecast/") else {
             return
         }
@@ -76,7 +93,7 @@ class RootViewModel {
         
         //let weatherRequest = WeatherRequest(baseUrl: WeatherService.authenticatedBaseUrl, latitude: Defaults.latitude , longitude: Defaults.longitude)
         
-        let weatherRequest = WeatherRequest(baseUrl: WeatherService.authenticatedBaseUrl, location: Defaults.location)
+        let weatherRequest = WeatherRequest(baseUrl: WeatherService.authenticatedBaseUrl, location: location)
         
         URLSession.shared.dataTask(with: weatherRequest.url) { [weak self] (data, response, error) in
             
@@ -120,5 +137,33 @@ class RootViewModel {
                 }
             }
         }.resume() //Para enviar de verdade...
+    }
+}
+
+extension RootViewModel: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == .notDetermined {
+            locationManager.requestWhenInUseAuthorization()
+        }
+        else
+        {
+            if status == .authorizedWhenInUse {
+                fetchLocation()
+            } else {
+                didFetchWeaterData?(nil, .notAuthorizedToRequestLocation)
+            }
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.first else {
+            return
+        }
+        
+        fetchWeatherData(for: location)
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Unable to fetch Location (\(error))")
     }
 }
