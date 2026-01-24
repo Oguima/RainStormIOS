@@ -57,7 +57,7 @@ class WeekDayTableViewCell: UITableViewCell {
     }
     
     //Para não expor, da pra usar um protocolo...
-    func configure(with viewModel: weekDayViewModel) {
+    func configure(with viewModel: WeekDayViewModel) {
         dayLabel.text = viewModel.day
         dateLabel.text = viewModel.date
         iconImageView.image = viewModel.image

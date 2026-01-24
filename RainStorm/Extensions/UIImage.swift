@@ -9,6 +9,8 @@
 import UIKit
 
 extension UIImage {
+    
+    /// Returns an image for the given icon name (string)
     class func imageForIcon(with name: String) -> UIImage? {
         switch name {
             case "clear-day",
@@ -26,5 +28,11 @@ extension UIImage {
             default:
                 return UIImage(named: "clear-day")
         }
+    }
+    
+    /// Returns an image for the given Open-Meteo weathercode (int)
+    class func imageForWeatherCode(_ code: Int) -> UIImage? {
+        let iconName = WeatherCodeMapper.iconName(for: code)
+        return UIImage(named: iconName)
     }
 }

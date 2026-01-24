@@ -8,38 +8,32 @@
 
 import UIKit
 
-struct weekDayViewModel {
+struct WeekDayViewModel {
     
-    let weatherData: DarkSkyResponse.Daily.CondictionsDayly //ForecastWeatherCondictions
-    let cv = Conversions()
+    let weatherData: OpenMeteoResponse.DailyForecast
     
     private let dateFormatter = DateFormatter()
     
     var day: String {
         dateFormatter.dateFormat = "EEEE"
-        
-        return dateFormatter.string(from: weatherData.time)
+        return dateFormatter.string(from: weatherData.date)
     }
     
     var date: String {
         dateFormatter.dateFormat = "MMMM d"
-        
-        return dateFormatter.string(from: weatherData.time)
+        return dateFormatter.string(from: weatherData.date)
     }
     
     var temperature: String {
-        //let min = String(format: "%.1f ºF", weatherData.temperatureMin)
-        //let max = String(format: "%.1f ºF", weatherData.temperatureMax)
-        
-        let min = String(format: "%.1f ºC", cv.fahrenheitToCelsius(tempInF: weatherData.temperatureMin))
-        let max = String(format: "%.1f ºC", cv.fahrenheitToCelsius(tempInF: weatherData.temperatureMax))
-        
+        // Open-Meteo já retorna em Celsius - sem necessidade de conversão
+        let min = String(format: "%.1f ºC", weatherData.temperatureMin)
+        let max = String(format: "%.1f ºC", weatherData.temperatureMax)
         return "\(min) - \(max)"
     }
     
     var windSpeed: String {
-        //return String(format: "%.f MPH" , weatherData.windSpeed)
-        return String(format: "%.f Km" , cv.milesToKilometers(speedInMPH: weatherData.windSpeed))
+        // Open-Meteo já retorna em km/h - sem necessidade de conversão
+        return String(format: "%.f km/h", weatherData.windspeed)
     }
     
     var image: UIImage? {
@@ -47,10 +41,3 @@ struct weekDayViewModel {
     }
     
 }
-
-/*
- //Falhou
-extension WeekViewModel: WeekDayRepresentable {
-    
-}
- */

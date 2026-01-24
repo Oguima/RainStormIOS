@@ -18,11 +18,19 @@ struct WeatherRequest {
     private var latitude: Double {
         return location.coordinate.latitude
     }
-    private var longitude: Double{
+    private var longitude: Double {
         return location.coordinate.longitude
     }
     
     var url: URL {
-        return baseUrl.appendingPathComponent("\(latitude),\(longitude)")
+        var components = URLComponents(url: baseUrl, resolvingAgainstBaseURL: false)!
+        components.queryItems = [
+            URLQueryItem(name: "latitude", value: String(latitude)),
+            URLQueryItem(name: "longitude", value: String(longitude)),
+            URLQueryItem(name: "current_weather", value: "true"),
+            URLQueryItem(name: "daily", value: "temperature_2m_max,temperature_2m_min,weathercode,windspeed_10m_max"),
+            URLQueryItem(name: "timezone", value: "auto")
+        ]
+        return components.url!
     }
 }

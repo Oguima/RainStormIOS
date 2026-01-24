@@ -13,52 +13,23 @@ protocol WeatherData {
     var latitude: Double { get }
     var longitude: Double { get }
     
-    var current: CurrentWeatherCondictions { get }
-    //var forecast: [ForecastWeatherCondictions] { get }
-    
-    //var forecast: [RainStorm.DarkSkyResponse.Daily.CondictionsDayly] { get }
-    //var forecast: [DailyCondictions] { get }
-    var forecast: [DarkSkyResponse.Daily.CondictionsDayly] { get }
-    //var daily: [DailyCondictions] { get }
+    var current: CurrentWeatherConditions { get }
+    var forecast: [OpenMeteoResponse.DailyForecast] { get }
 }
 
-protocol WeatherCondictions {
+protocol WeatherConditions {
     var time: Date { get }
     var icon: String { get }
     var windSpeed: Double { get }
 }
 
-protocol CurrentWeatherCondictions: WeatherCondictions {
+protocol CurrentWeatherConditions: WeatherConditions {
     var summary: String { get }
-    //var temperature: Double { get }
+    var temperature: Double { get }
 }
 
-protocol ForecastWeatherCondictions: WeatherCondictions {
+protocol ForecastWeatherConditions: WeatherConditions {
     var summary: String { get }
-    var temperatureMin: Double { get }
-    var temperatureMax: Double { get }
-    //var temperature: Double? { get }
-}
-
-protocol DailyCondictions { //: WeatherCondictions {
-    //var summary: String { get }
-    //var icon: String { get }
-    //var data: [ForecastWeatherCondictions] { get }
-    
-    //var time: Date { get }
-    //var icon: String { get }
-    
-    //var windSpeed: Double { get }
-    //var temperature: Double? { get }
-    
-    //var summary: String { get }
-    //var temperatureMin: Double { get }
-    //var temperatureMax: Double { get }
-    
-    var time: Date { get }
-    var summary: String { get }
-    var icon: String { get }
-    var windSpeed: Double { get }
     var temperatureMin: Double { get }
     var temperatureMax: Double { get }
 }

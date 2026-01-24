@@ -11,8 +11,7 @@ import UIKit
 
 struct DayViewModel {
     
-    let weatherData: CurrentWeatherCondictions
-    let cv = Conversions()
+    let weatherData: CurrentWeatherConditions
     
     //Ajuste do formato de datas...
     private let dateFormatter = DateFormatter()
@@ -33,22 +32,14 @@ struct DayViewModel {
         return weatherData.summary
     }
 
-    /*
     var temperature: String {
-        return String(format: "%.1f ºF", weatherData.temperature)
-    }
- */
-    var temperature: String {
-        //return String(format: "%.1f ºF", weatherData.temperature)
-        //return String(format: "%.1f ºC", cv.fahrenheitToCelsius(tempInF:weatherData.temperature)) //Convertido
-        return "" //Não tem nos dados... TODO
+        // Open-Meteo já retorna em Celsius
+        return String(format: "%.1f ºC", weatherData.temperature)
     }
     
     var windSpeed: String {
-        //return String(format: "%.f MPH", weatherData.windSpeed)
-        //Convertendo: MPH para Kmh : milesToKilometers
-        let speed = cv.milesToKilometers(speedInMPH: weatherData.windSpeed)
-        return String(format: "%.f Km", speed)
+        // Open-Meteo já retorna em km/h
+        return String(format: "%.f km/h", weatherData.windSpeed)
     }
     
     //Imagens: http://adamwhitcroft.com/climacons/

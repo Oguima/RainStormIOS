@@ -78,65 +78,45 @@ class RootViewModel: NSObject
      
      */
     private func fetchWeatherData(for location: CLLocation) {
-        /*guard let baseUrl = URL(string: "https://api.darksky.net/forecast/") else {
-            return
-        }
+        // Create URL for Open-Meteo API
+        let weatherRequest = WeatherRequest(baseUrl: WeatherService.baseUrl, location: location)
         
-        //Secret Key: https://darksky.net/dev/account
-        let authenticatedBaseUrl = baseUrl.appendingPathComponent("d338cfc01c45f8ae583757dba7c77dbc")
-        
-        //let url = authenticatedBaseUrl.appendingPathComponent("\(37.335114),\(-122.008928)")
-        */
-        
-        // Create URL
-        //let weatherRequest = WeatherRequest(baseUrl: authenticatedBaseUrl, latitude: 37.335114, longitude: -122.008928)
-        
-        //let weatherRequest = WeatherRequest(baseUrl: WeatherService.authenticatedBaseUrl, latitude: Defaults.latitude , longitude: Defaults.longitude)
-        
-        let weatherRequest = WeatherRequest(baseUrl: WeatherService.authenticatedBaseUrl, location: location)
+        print("Fetching weather from: \(weatherRequest.url)")
         
         URLSession.shared.dataTask(with: weatherRequest.url) { [weak self] (data, response, error) in
             
-            //Para melhorar o tratamento de erro...
+            // Log response status
             if let response = response as? HTTPURLResponse {
                 print("Status Code: \(response.statusCode)")
             }
             
-            //Precisa enviar os dados na main thread: ....
+            // Process on main thread
             DispatchQueue.main.async {
                 if let error = error {
-                    //print("Request Did Fail (\(error))")
                     print("Unable to Fetch Weather Data (\(error))")
                     self?.didFetchWeaterData?(nil, .noWeatherDataAvailable)
                 } else if let data = data {
                     
-                    //Teste sem codable... só para ver se funciona...
-                    //self?.didFetchWeaterData?(data, nil) //OK
-                    //MARK: Estrutura de leitura Codable, Json.
                     let decoder = JSONDecoder()
                     
-                    //Ajuste da data...
-                    //decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)  //.secondsSince1970
-                    decoder.dateDecodingStrategy = .secondsSince1970
-                    
                     do {
-                        let darkSkyResponse = try decoder.decode(DarkSkyResponse.self, from: data)
+                        let openMeteoResponse = try decoder.decode(OpenMeteoResponse.self, from: data)
                         
-                        print("---- Original Response ---")
-                        print (darkSkyResponse)
+                        print("---- Open-Meteo Response ---")
+                        print("Location: \(openMeteoResponse.latitude), \(openMeteoResponse.longitude)")
+                        print("Current Temp: \(openMeteoResponse.currentWeather.temperature)°C")
+                        print("Weather: \(openMeteoResponse.currentWeather.summary)")
                         
-                        self?.didFetchWeaterData?(darkSkyResponse, nil)
+                        self?.didFetchWeaterData?(openMeteoResponse, nil)
                     } catch {
-                        print ("Unable to decode JSON Response \(error)")
-                        
+                        print("Unable to decode JSON Response: \(error)")
                         self?.didFetchWeaterData?(nil, .noWeatherDataAvailable)
                     }
                 } else {
-                    //print("Response: \(response)" )
                     self?.didFetchWeaterData?(nil, .noWeatherDataAvailable)
                 }
             }
-        }.resume() //Para enviar de verdade...
+        }.resume()
     }
 }
 
