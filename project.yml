@@ -1,0 +1,97 @@
+# Gera RainStorm.xcodeproj. Depois de adicionar/remover arquivos ou mudar settings: `xcodegen`
+name: RainStorm
+
+options:
+  bundleIdPrefix: com.guimagames.ios
+  deploymentTarget:
+    iOS: "16.0"
+  developmentLanguage: en
+  xcodeVersion: "26.5"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+settings:
+  base:
+    DEVELOPMENT_TEAM: HB54SB8ZZ9
+    CODE_SIGN_STYLE: Automatic
+    TARGETED_DEVICE_FAMILY: "1"
+    MARKETING_VERSION: "2.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    # Swift 6.2 "Approachable Concurrency": tudo é @MainActor por padrão (app UIKit/SwiftUI pequeno).
+    SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+    SWIFT_APPROACHABLE_CONCURRENCY: YES
+    SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY: YES
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+    SWIFT_EMIT_LOC_STRINGS: YES
+    STRING_CATALOG_GENERATE_SYMBOLS: NO
+
+packages:
+  SnapshotTesting:
+    url: https://github.com/pointfreeco/swift-snapshot-testing
+    from: 1.19.6
+
+targets:
+  RainStorm:
+    type: application
+    platform: iOS
+    sources:
+      - path: RainStorm
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.guimagames.ios.RainStorm
+        INFOPLIST_FILE: RainStorm/Info.plist
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ENABLE_PREVIEWS: YES
+
+  RainStormTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: RainStormTests
+        excludes:
+          - "**/__Snapshots__/**"
+    dependencies:
+      - target: RainStorm
+      - package: SnapshotTesting
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.guimagames.ios.RainStormTests
+        GENERATE_INFOPLIST_FILE: YES
+
+  RainStormUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: RainStormUITests
+    dependencies:
+      - target: RainStorm
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.guimagames.ios.RainStormUITests
+        GENERATE_INFOPLIST_FILE: YES
+        # XCUITest roda fora do app: sem isolamento padrão MainActor.
+        SWIFT_DEFAULT_ACTOR_ISOLATION: nonisolated
+
+schemes:
+  RainStorm:
+    build:
+      targets:
+        RainStorm: all
+        RainStormTests: [test]
+        RainStormUITests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      gatherCoverageData: true
+      coverageTargets:
+        - RainStorm
+      testPlans:
+        - path: RainStorm.xctestplan
+          defaultPlan: true
+        - path: Nightly.xctestplan
+    archive:
+      config: Release

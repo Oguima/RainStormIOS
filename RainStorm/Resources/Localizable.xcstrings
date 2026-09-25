@@ -1,0 +1,436 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "Allow location access in Settings to see the weather where you are.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permita o acesso à localização nos Ajustes para ver o clima onde você está."
+          }
+        }
+      }
+    },
+    "Clear sky": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Céu limpo"
+          }
+        }
+      }
+    },
+    "Day": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dia"
+          }
+        }
+      }
+    },
+    "Dense drizzle": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garoa intensa"
+          }
+        }
+      }
+    },
+    "Dense freezing drizzle": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garoa congelante intensa"
+          }
+        }
+      }
+    },
+    "Depositing rime fog": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nevoeiro com geada"
+          }
+        }
+      }
+    },
+    "Fog": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nevoeiro"
+          }
+        }
+      }
+    },
+    "Heavy freezing rain": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chuva congelante forte"
+          }
+        }
+      }
+    },
+    "Heavy rain": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chuva forte"
+          }
+        }
+      }
+    },
+    "Heavy snow fall": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neve forte"
+          }
+        }
+      }
+    },
+    "Heavy snow showers": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pancadas de neve fortes"
+          }
+        }
+      }
+    },
+    "Light drizzle": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garoa fraca"
+          }
+        }
+      }
+    },
+    "Light freezing drizzle": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garoa congelante fraca"
+          }
+        }
+      }
+    },
+    "Light freezing rain": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chuva congelante fraca"
+          }
+        }
+      }
+    },
+    "Loading weather…": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carregando o clima…"
+          }
+        }
+      }
+    },
+    "Mainly clear": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Predominantemente limpo"
+          }
+        }
+      }
+    },
+    "Max": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Máx."
+          }
+        }
+      }
+    },
+    "Min": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mín."
+          }
+        }
+      }
+    },
+    "Minimum %@, maximum %@": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mínima de %@, máxima de %@"
+          }
+        }
+      }
+    },
+    "Moderate drizzle": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garoa moderada"
+          }
+        }
+      }
+    },
+    "Moderate rain": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chuva moderada"
+          }
+        }
+      }
+    },
+    "Moderate rain showers": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pancadas de chuva moderadas"
+          }
+        }
+      }
+    },
+    "Moderate snow fall": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neve moderada"
+          }
+        }
+      }
+    },
+    "Next days": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Próximos dias"
+          }
+        }
+      }
+    },
+    "Open Settings": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir Ajustes"
+          }
+        }
+      }
+    },
+    "Overcast": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nublado"
+          }
+        }
+      }
+    },
+    "Partly cloudy": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parcialmente nublado"
+          }
+        }
+      }
+    },
+    "Please try again in a few moments.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tente novamente em alguns instantes."
+          }
+        }
+      }
+    },
+    "RainStorm": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RainStorm"
+          }
+        }
+      }
+    },
+    "Showing the forecast for %@": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostrando a previsão para %@"
+          }
+        }
+      }
+    },
+    "Slight rain": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chuva fraca"
+          }
+        }
+      }
+    },
+    "Slight rain showers": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pancadas de chuva fracas"
+          }
+        }
+      }
+    },
+    "Slight snow fall": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neve fraca"
+          }
+        }
+      }
+    },
+    "Slight snow showers": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pancadas de neve fracas"
+          }
+        }
+      }
+    },
+    "Snow grains": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grãos de neve"
+          }
+        }
+      }
+    },
+    "Temperature this week": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temperatura na semana"
+          }
+        }
+      }
+    },
+    "Thunderstorm": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tempestade"
+          }
+        }
+      }
+    },
+    "Thunderstorm with heavy hail": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tempestade com granizo forte"
+          }
+        }
+      }
+    },
+    "Thunderstorm with slight hail": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tempestade com granizo fraco"
+          }
+        }
+      }
+    },
+    "Try again": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tentar novamente"
+          }
+        }
+      }
+    },
+    "Unable to load the weather": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível carregar o clima"
+          }
+        }
+      }
+    },
+    "Unknown": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desconhecido"
+          }
+        }
+      }
+    },
+    "Violent rain showers": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pancadas de chuva violentas"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

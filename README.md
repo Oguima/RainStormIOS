@@ -63,52 +63,84 @@ Os códigos numéricos da Open-Meteo são convertidos para ícones:
 
 ## Arquitetura
 
-O projeto segue o padrão **MVVM** (Model-View-ViewModel):
+SwiftUI (ciclo de vida `App`) + MVVM, iOS 16+, Swift 6 com isolamento padrão `MainActor`:
 
 ```
 RainStorm/
-├── Application Delegate/
-├── Configuration/
-│   ├── Configuration.swift      # URL base da API
-│   └── Styles.swift             # Cores e fontes
-├── Models/
-│   ├── OpenMeteoResponse.swift  # Modelo de resposta da API
-│   └── WeatherRequest.swift     # Construção de URLs
-├── Protocols/
-│   └── WeatherData.swift        # Protocolos de dados
-├── Utils/
-│   ├── Conversions.swift        # Conversões de unidades
-│   └── WeatherCodeMapper.swift  # Mapeamento de códigos
-├── Extensions/
-│   └── UIImage.swift            # Ícones do clima
-└── View Controllers/
-    ├── Root View Controller/
-    │   └── View Models/
-    │       └── RootViewModel.swift
-    └── Weather View Controller/
-        ├── Day View Controller/
-        │   └── View Models/
-        │       └── DayViewModel.swift
-        └── Week View Controller/
-            └── View Models/
-                ├── WeekViewModel.swift
-                └── WeekDayViewModel.swift
+├── App/
+│   ├── RainStormApp.swift          # @main + escolha de dependências (real × mock)
+│   ├── Configuration.swift         # URL da API, localização padrão, cores
+│   └── Debug/                      # Mocks e fixtures (só em DEBUG): previews, testes, UI tests
+├── Domain/
+│   ├── WeatherSnapshot.swift       # Modelo de UI
+│   ├── WeatherDataError.swift
+│   ├── WeatherCodeMapper.swift     # WMO code → ícone / descrição localizada
+│   └── WeatherFormatter.swift      # Measurement + Date.FormatStyle (pt-BR, °C/°F, km/h/mph)
+├── Services/
+│   ├── WeatherServicing.swift      # Protocolo + OpenMeteoWeatherService (async, typed throws)
+│   ├── LocationProviding.swift     # Wrapper async sobre CLLocationManager
+│   ├── OpenMeteoResponse.swift     # DTO com validação no decode
+│   └── WeatherRequest.swift
+├── Features/Weather/               # WeatherViewModel (ObservableObject) + views SwiftUI + Swift Charts
+└── Resources/                      # Assets, Localizable/InfoPlist.xcstrings, PrivacyInfo.xcprivacy
 ```
 
 ## Requisitos
 
-- iOS 13.0+
-- Xcode 11.2+
-- Swift 5.0+
+- iOS 16.0+ (iPhone 8 / X em diante)
+- Xcode 26+
+- Swift 6
+- [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`)
+
+## Projeto (XcodeGen)
+
+O `RainStorm.xcodeproj` é **gerado** a partir do `project.yml`. Depois de adicionar, remover ou mover arquivos, ou de mudar build settings:
+
+```bash
+xcodegen
+```
+
+Não edite o `.xcodeproj` à mão: as alterações são perdidas na próxima geração.
+
+## Testes
+
+| Camada | Framework | Onde |
+|--------|-----------|------|
+| Unitários e integração | Swift Testing | `RainStormTests/Domain`, `Services`, `Features` |
+| Snapshot | swift-snapshot-testing | `RainStormTests/Snapshots` (referências em `__Snapshots__/`, gravadas no iPhone 17 / iOS 26.5) |
+| UI, permissão de localização, acessibilidade, performance | XCUITest | `RainStormUITests` |
+
+Test Plans:
+- **`RainStorm`** (padrão, ⌘U): configurações pt-BR e en-US, cobertura de código, ordem aleatória. Pula `LaunchPerformanceTests`.
+- **`Nightly`**: tudo, mais Thread Sanitizer e *retry on failure* (até 3x) para detectar testes instáveis.
+
+```bash
+# Dia a dia
+xcodebuild test -project RainStorm.xcodeproj -scheme RainStorm -testPlan RainStorm \
+  -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.5'
+
+# Nightly
+xcodebuild test -project RainStorm.xcodeproj -scheme RainStorm -testPlan Nightly \
+  -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.5'
+```
+
+- **Regravar snapshots de propósito:** em `WeatherSnapshotTests`, troque `.snapshots(record: .missing)` por `.all`, rode, revise as imagens e volte para `.missing`.
+- **Rodar o app com dados falsos:** launch arguments `-ui-testing -scenario success|loading|locationDenied|offline|serviceUnavailable|invalidData`.
 
 ## Permissões
 
-O app solicita acesso à localização do usuário para exibir o clima da região atual. Configure no `Info.plist`:
-
-- `Privacy - Location When In Use Usage Description`
-- `Privacy - Location Always and When In Use Usage Description`
+O app pede acesso à localização **durante o uso** (`NSLocationWhenInUseUsageDescription`, traduzido em `InfoPlist.xcstrings`). Se o usuário negar, o app mostra a previsão de São Paulo com um aviso e um atalho para os Ajustes. O `PrivacyInfo.xcprivacy` declara a localização aproximada enviada à Open-Meteo.
 
 ## Histórico de Alterações
+
+### Setembro 2026
+- **iOS 16 + Swift 6 + Xcode 26**: target mínimo de 13.0 para 16.0 (maior alcance no Brasil com toolchain atual)
+- **Migração para SwiftUI**: remoção de UIKit, storyboards, `AppDelegate`/`SceneDelegate`
+- `async/await`, typed throws, strict concurrency `complete`
+- Localização pt-BR/en com String Catalogs; °C/°F e km/h/mph conforme o locale
+- Gráfico semanal com Swift Charts; Dark Mode, Dynamic Type e auditoria de acessibilidade
+- Suíte de testes: Swift Testing, snapshots, XCUITest e Test Plans
+- Correções: datas no fuso do local consultado, validação do JSON (arrays desalinhados e datas inválidas), bug do ano "YYYY", contraste da cor da marca
 
 ### Janeiro 2026
 - **Migração de API**: Substituição do DarkSky (descontinuado) pelo Open-Meteo
@@ -119,7 +151,8 @@ O app solicita acesso à localização do usuário para exibir o clima da regiã
 ## Documentação
 
 Para mais detalhes sobre a migração, consulte:
-- [Plano de Migração](Docs/MigrationPlan_OpenMeteo.md)
+- [Plano de Migração Open-Meteo](Docs/MigrationPlan_OpenMeteo.md)
+- [Análise de Target, Migração SwiftUI e Plano de Testes](Docs/TargetUpgrade_Analysis.md)
 
 ## Licença
 

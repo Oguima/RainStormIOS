@@ -1,0 +1,58 @@
+{
+  "configurations": [
+    {
+      "id": "0ACEAC59-1C18-5C2B-88F0-D20B79D35DB4",
+      "name": "pt-BR",
+      "options": {
+        "language": "pt-BR",
+        "region": "BR"
+      }
+    },
+    {
+      "id": "6537C29E-D064-5DC3-889D-FEEDEDC12B3E",
+      "name": "en-US",
+      "options": {
+        "language": "en",
+        "region": "US"
+      }
+    }
+  ],
+  "defaultOptions": {
+    "codeCoverage": {
+      "targets": [
+        {
+          "containerPath": "container:RainStorm.xcodeproj",
+          "identifier": "A4050E400ED24CDDF64708F9",
+          "name": "RainStorm"
+        }
+      ]
+    },
+    "targetForVariableExpansion": {
+      "containerPath": "container:RainStorm.xcodeproj",
+      "identifier": "A4050E400ED24CDDF64708F9",
+      "name": "RainStorm"
+    },
+    "testExecutionOrdering": "random"
+  },
+  "testTargets": [
+    {
+      "parallelizable": true,
+      "target": {
+        "containerPath": "container:RainStorm.xcodeproj",
+        "identifier": "4A8FFCB1DCFD05D9B441E818",
+        "name": "RainStormTests"
+      }
+    },
+    {
+      "skippedTests": [
+        "LaunchPerformanceTests"
+      ],
+      "target": {
+        "containerPath": "container:RainStorm.xcodeproj",
+        "identifier": "3C870F3A62153E0D3E2FECCB",
+        "name": "RainStormUITests"
+      }
+    }
+  ],
+  "version": 1
+}
