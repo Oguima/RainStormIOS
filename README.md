@@ -34,10 +34,12 @@ https://api.open-meteo.com/v1/forecast
 | `current_weather` | Retorna dados do clima atual |
 | `daily` | Campos da previsão diária |
 | `timezone` | Fuso horário (auto = automático) |
+| `hourly` | Campos da previsão horária (timeline do widget) |
+| `forecast_hours` | Quantidade de horas a partir da hora atual (12) |
 
 **Exemplo de requisição:**
 ```
-https://api.open-meteo.com/v1/forecast?latitude=-23.55&longitude=-46.63&current_weather=true&daily=temperature_2m_max,temperature_2m_min,weathercode,windspeed_10m_max&timezone=auto
+https://api.open-meteo.com/v1/forecast?latitude=-23.55&longitude=-46.63&current_weather=true&daily=temperature_2m_max,temperature_2m_min,weathercode,windspeed_10m_max&timezone=auto&hourly=temperature_2m,weathercode,windspeed_10m,is_day&forecast_hours=12
 ```
 
 **Dados retornados:**
@@ -46,6 +48,7 @@ https://api.open-meteo.com/v1/forecast?latitude=-23.55&longitude=-46.63&current_
 - `current_weather.weathercode` - Código da condição climática
 - `daily.temperature_2m_min/max` - Temperaturas mínima/máxima
 - `daily.weathercode` - Códigos de condição para cada dia
+- `hourly.*` - Próximas 12 horas, começando na hora atual, no fuso local (opcional no decode)
 
 ### Mapeamento de Weather Codes
 
@@ -63,52 +66,118 @@ Os códigos numéricos da Open-Meteo são convertidos para ícones:
 
 ## Arquitetura
 
-O projeto segue o padrão **MVVM** (Model-View-ViewModel):
+SwiftUI (ciclo de vida `App`) + MVVM, iOS 16+, Swift 6 com isolamento padrão `MainActor`:
 
 ```
-RainStorm/
-├── Application Delegate/
-├── Configuration/
-│   ├── Configuration.swift      # URL base da API
-│   └── Styles.swift             # Cores e fontes
-├── Models/
-│   ├── OpenMeteoResponse.swift  # Modelo de resposta da API
-│   └── WeatherRequest.swift     # Construção de URLs
-├── Protocols/
-│   └── WeatherData.swift        # Protocolos de dados
-├── Utils/
-│   ├── Conversions.swift        # Conversões de unidades
-│   └── WeatherCodeMapper.swift  # Mapeamento de códigos
-├── Extensions/
-│   └── UIImage.swift            # Ícones do clima
-└── View Controllers/
-    ├── Root View Controller/
-    │   └── View Models/
-    │       └── RootViewModel.swift
-    └── Weather View Controller/
-        ├── Day View Controller/
-        │   └── View Models/
-        │       └── DayViewModel.swift
-        └── Week View Controller/
-            └── View Models/
-                ├── WeekViewModel.swift
-                └── WeekDayViewModel.swift
+Shared/                             # Compilado no app E no widget (módulos separados)
+├── Configuration.swift             # URL da API, localização padrão, deep link, cores
+├── Domain/
+│   ├── WeatherSnapshot.swift       # Modelo de UI (Codable, com previsão horária)
+│   ├── WeatherSnapshot+Sample.swift # Dados de exemplo (placeholder do widget e base do `fixture`)
+│   ├── WeatherTimelineBuilder.swift # Snapshot + agora → entradas do widget + próxima recarga
+│   ├── WeatherDataError.swift
+│   ├── WeatherCodeMapper.swift     # WMO code → ícone / SF Symbol / descrição localizada
+│   └── WeatherFormatter.swift      # Measurement + Date.FormatStyle (pt-BR, °C/°F, km/h/mph)
+├── Services/
+│   ├── WeatherServicing.swift      # Protocolo + OpenMeteoWeatherService (async, typed throws)
+│   ├── OpenMeteoResponse.swift     # DTO com validação no decode
+│   ├── WeatherRequest.swift
+│   ├── SharedWeatherStore.swift    # App Group: última coordenada real + último clima
+│   ├── WidgetSyncing.swift         # App → widget: grava e chama reloadTimelines
+│   └── WeatherWidgetLoader.swift   # Rede → cache → "abra o app"
+├── WidgetUI/                       # Views do widget por família (testadas por snapshot)
+└── Resources/                      # Localizable.xcstrings, WeatherIcons.xcassets
+
+RainStorm/                          # App
+├── App/
+│   ├── RainStormApp.swift          # @main + escolha de dependências (real × mock)
+│   └── Debug/                      # Mocks e fixtures (só em DEBUG): previews, testes, UI tests
+├── Services/LocationProviding.swift # Wrapper async sobre CLLocationManager (só o app pede localização)
+├── Features/Weather/               # WeatherViewModel (ObservableObject) + views SwiftUI + Swift Charts
+└── Resources/                      # AppIcon, InfoPlist.xcstrings, PrivacyInfo.xcprivacy
+
+RainStormWidget/                    # Extensão WidgetKit
+├── RainStormWidgetBundle.swift     # @main
+├── CurrentWeatherWidget.swift      # StaticConfiguration + famílias + previews
+├── WeatherTimelineProvider.swift   # Casca sobre o WeatherWidgetLoader
+└── Info.plist, entitlements, PrivacyInfo.xcprivacy
 ```
+
+## Widget "Clima atual"
+
+O primeiro card do app (data, hora, ícone, temperatura, descrição e vento) na tela inicial e na tela de bloqueio, com os mesmos formatadores, ícones, cores AA e traduções.
+
+| Família | Conteúdo |
+|---------|----------|
+| Pequeno | Ícone, temperatura, descrição, mínima–máxima do dia |
+| Médio | Réplica do card: data, hora, descrição, vento, ícone, temperatura e faixa do dia |
+| Circular (bloqueio) | `Gauge` da mínima à máxima com a temperatura no centro |
+| Retangular (bloqueio) | Ícone + temperatura, descrição, vento |
+| Inline (bloqueio) | "☁ 15,9 °C · Nublado" |
+
+- **Localização:** o widget não pede permissão. Usa a última coordenada **real** que o app salvou no App Group `group.com.guimagames.ios.RainStorm` (o fallback de São Paulo nunca sobrescreve uma posição real); sem nenhuma, usa São Paulo.
+- **Timeline:** uma entrada para agora e uma por hora futura (até 6), cada uma com a faixa do dia daquela hora; nova busca após 60 min (`WeatherTimelinePolicy.standard`).
+- **Sem rede:** mostra o último clima em cache (até 12 h; "agora" vem da hora prevista) com "Atualizado às 19:45". Sem cache válido: "Abra o RainStorm para carregar o clima". A busca do widget tem timeout de 15 s.
+- **Toque:** abre `rainstorm://weather`, que volta ao app e recarrega (e o app atualiza o widget).
+- **Rodar:** scheme `RainStormWidget` (pergunta o app hospedeiro). Na primeira execução num aparelho, a assinatura automática precisa registrar o App Group no Developer Portal (time `HB54SB8ZZ9`).
 
 ## Requisitos
 
-- iOS 13.0+
-- Xcode 11.2+
-- Swift 5.0+
+- iOS 16.0+ (iPhone 8 / X em diante)
+- Xcode 26+
+- Swift 6
+- [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`)
+
+## Projeto (XcodeGen)
+
+O `RainStorm.xcodeproj` é **gerado** a partir do `project.yml`. Depois de adicionar, remover ou mover arquivos, ou de mudar build settings:
+
+```bash
+xcodegen
+```
+
+Não edite o `.xcodeproj` à mão: as alterações são perdidas na próxima geração.
+
+## Testes
+
+| Camada | Framework | Onde |
+|--------|-----------|------|
+| Unitários e integração | Swift Testing | `RainStormTests/Domain`, `Services`, `Features`, `Widget` |
+| Snapshot | swift-snapshot-testing | `RainStormTests/Snapshots` (referências em `__Snapshots__/`, gravadas no iPhone 17 / iOS 26.5) |
+| UI, permissão de localização, deep link do widget, acessibilidade, performance | XCUITest | `RainStormUITests` |
+
+Test Plans:
+- **`RainStorm`** (padrão, ⌘U): configurações pt-BR e en-US, cobertura de código, ordem aleatória. Pula `LaunchPerformanceTests`.
+- **`Nightly`**: tudo, mais Thread Sanitizer e *retry on failure* (até 3x) para detectar testes instáveis.
+
+```bash
+# Dia a dia
+xcodebuild test -project RainStorm.xcodeproj -scheme RainStorm -testPlan RainStorm \
+  -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.5'
+
+# Nightly
+xcodebuild test -project RainStorm.xcodeproj -scheme RainStorm -testPlan Nightly \
+  -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.5'
+```
+
+- **Regravar snapshots de propósito:** em `WeatherSnapshotTests` / `WidgetSnapshotTests`, troque `.snapshots(record: .missing)` por `.all`, rode, revise as imagens e volte para `.missing`.
+- **Rodar o app com dados falsos:** launch arguments `-ui-testing -scenario success|loading|locationDenied|offline|serviceUnavailable|invalidData`.
 
 ## Permissões
 
-O app solicita acesso à localização do usuário para exibir o clima da região atual. Configure no `Info.plist`:
-
-- `Privacy - Location When In Use Usage Description`
-- `Privacy - Location Always and When In Use Usage Description`
+O app pede acesso à localização **durante o uso** (`NSLocationWhenInUseUsageDescription`, traduzido em `InfoPlist.xcstrings`). Se o usuário negar, o app mostra a previsão de São Paulo com um aviso e um atalho para os Ajustes. O widget não pede permissão: reaproveita a última coordenada salva pelo app. Os `PrivacyInfo.xcprivacy` do app e do widget declaram a localização aproximada enviada à Open-Meteo e o uso de `UserDefaults` do App Group (motivo `1C8F.1`).
 
 ## Histórico de Alterações
+
+### Setembro 2026
+- **Widget "Clima atual"** (WidgetKit, iOS 16): pequeno, médio e tela de bloqueio (circular, retangular, inline); código compartilhado em `Shared/`, App Group, cache offline e deep link `rainstorm://weather`
+- **iOS 16 + Swift 6 + Xcode 26**: target mínimo de 13.0 para 16.0 (maior alcance no Brasil com toolchain atual)
+- **Migração para SwiftUI**: remoção de UIKit, storyboards, `AppDelegate`/`SceneDelegate`
+- `async/await`, typed throws, strict concurrency `complete`
+- Localização pt-BR/en com String Catalogs; °C/°F e km/h/mph conforme o locale
+- Gráfico semanal com Swift Charts; Dark Mode, Dynamic Type e auditoria de acessibilidade
+- Suíte de testes: Swift Testing, snapshots, XCUITest e Test Plans
+- Correções: datas no fuso do local consultado, validação do JSON (arrays desalinhados e datas inválidas), bug do ano "YYYY", contraste da cor da marca
 
 ### Janeiro 2026
 - **Migração de API**: Substituição do DarkSky (descontinuado) pelo Open-Meteo
@@ -119,7 +188,8 @@ O app solicita acesso à localização do usuário para exibir o clima da regiã
 ## Documentação
 
 Para mais detalhes sobre a migração, consulte:
-- [Plano de Migração](Docs/MigrationPlan_OpenMeteo.md)
+- [Plano de Migração Open-Meteo](Docs/MigrationPlan_OpenMeteo.md)
+- [Análise de Target, Migração SwiftUI e Plano de Testes](Docs/TargetUpgrade_Analysis.md)
 
 ## Licença
 

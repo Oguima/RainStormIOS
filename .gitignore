@@ -63,3 +63,17 @@ fastlane/report.xml
 fastlane/screenshots
 
 .DS_Store
+## XcodeGen
+# O RainStorm.xcodeproj é gerado a partir do project.yml: rode `xcodegen` antes de abrir.
+# Ficam versionados só os schemes compartilhados e o Package.resolved (versões dos pacotes).
+RainStorm.xcodeproj/*
+!RainStorm.xcodeproj/xcshareddata/
+!RainStorm.xcodeproj/project.xcworkspace/
+RainStorm.xcodeproj/project.xcworkspace/*
+!RainStorm.xcodeproj/project.xcworkspace/xcshareddata/
+RainStorm.xcodeproj/project.xcworkspace/xcshareddata/*
+!RainStorm.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
+
+## Estado local de ferramentas de IA (memória e planos de execução)
+.remember/
+.superpowers/
