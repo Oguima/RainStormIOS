@@ -64,6 +64,16 @@ final class MockWeatherService: WeatherServicing {
     }
 }
 
+/// Registra as chamadas em vez de escrever no App Group (testes, previews e UI tests).
+final class MockWidgetSync: WidgetSyncing {
+
+    private(set) var fetches: [(snapshot: WeatherSnapshot, deviceCoordinate: CLLocationCoordinate2D?)] = []
+
+    func didFetch(_ snapshot: WeatherSnapshot, deviceCoordinate: CLLocationCoordinate2D?) {
+        fetches.append((snapshot, deviceCoordinate))
+    }
+}
+
 final class StubLocationProvider: LocationProviding {
 
     static let saoPaulo = CLLocation(latitude: -23.5505, longitude: -46.6333)

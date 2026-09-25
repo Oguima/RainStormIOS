@@ -36,6 +36,18 @@ nonisolated enum WeatherCodeMapper {
         }
     }
 
+    /// SF Symbol equivalente ao ícone: o `accessoryInline` do widget não desenha imagens do catálogo.
+    static func systemImageName(for code: Int, isDay: Bool = true) -> String {
+        switch code {
+        case 1, 2, 3: "cloud.fill"
+        case 45, 48: "cloud.fog.fill"
+        case 51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82: "cloud.rain.fill"
+        case 71, 73, 75, 77, 85, 86: "cloud.snow.fill"
+        case 95, 96, 99: "cloud.bolt.rain.fill"
+        default: isDay ? "sun.max.fill" : "moon.stars.fill"
+        }
+    }
+
     /// Returns a localizable description for the weathercode (translations in Localizable.xcstrings).
     static func description(for code: Int) -> LocalizedStringResource {
         switch code {

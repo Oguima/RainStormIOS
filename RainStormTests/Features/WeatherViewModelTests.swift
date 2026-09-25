@@ -12,14 +12,16 @@ struct WeatherViewModelTests {
 
     @Test func startsLoading() {
         let sut = WeatherViewModel(service: MockWeatherService(result: .success(.fixture)),
-                                   location: StubLocationProvider(.success(StubLocationProvider.saoPaulo)))
+                                   location: StubLocationProvider(.success(StubLocationProvider.saoPaulo)),
+                                   widgetSync: MockWidgetSync())
         #expect(sut.state == .loading)
     }
 
     @Test func loadsForecastForDeviceLocation() async throws {
         let service = MockWeatherService(result: .success(.fixture))
         let sut = WeatherViewModel(service: service,
-                                   location: StubLocationProvider(.success(StubLocationProvider.rioDeJaneiro)))
+                                   location: StubLocationProvider(.success(StubLocationProvider.rioDeJaneiro)),
+                                   widgetSync: MockWidgetSync())
 
         await sut.load()
 
@@ -32,7 +34,8 @@ struct WeatherViewModelTests {
     @Test(arguments: [LocationError.notAuthorized, .unavailable])
     func fallsBackToDefaultLocationWhenLocationFails(error: LocationError) async throws {
         let service = MockWeatherService(result: .success(.fixture))
-        let sut = WeatherViewModel(service: service, location: StubLocationProvider(.failure(error)))
+        let sut = WeatherViewModel(service: service, location: StubLocationProvider(.failure(error)),
+                                   widgetSync: MockWidgetSync())
 
         await sut.load()
 
@@ -45,7 +48,8 @@ struct WeatherViewModelTests {
     @Test(arguments: [WeatherDataError.offline, .serviceUnavailable, .invalidData])
     func exposesServiceError(error: WeatherDataError) async {
         let sut = WeatherViewModel(service: MockWeatherService(result: .failure(error)),
-                                   location: StubLocationProvider(.success(StubLocationProvider.saoPaulo)))
+                                   location: StubLocationProvider(.success(StubLocationProvider.saoPaulo)),
+                                   widgetSync: MockWidgetSync())
 
         await sut.load()
 
@@ -55,6 +59,7 @@ struct WeatherViewModelTests {
     @Test func retryAfterFailureRecovers() async {
         let sut = WeatherViewModel(service: MockWeatherService(result: .success(.fixture)),
                                    location: StubLocationProvider(.success(StubLocationProvider.saoPaulo)),
+                                   widgetSync: MockWidgetSync(),
                                    initialState: .failed(.offline))
 
         await sut.load()
@@ -65,13 +70,55 @@ struct WeatherViewModelTests {
     @Test func refreshFetchesAgain() async {
         let service = MockWeatherService(result: .success(.fixture))
         let sut = WeatherViewModel(service: service,
-                                   location: StubLocationProvider(.success(StubLocationProvider.saoPaulo)))
+                                   location: StubLocationProvider(.success(StubLocationProvider.saoPaulo)),
+                                   widgetSync: MockWidgetSync())
 
         await sut.load()
         await sut.load()
 
         #expect(service.requestedCoordinates.count == 2)
         #expect(sut.state == .loaded(.fixture, .device))
+    }
+
+    // MARK: - Widget
+
+    @Test func deviceFetchSyncsCoordinateAndSnapshotToTheWidget() async throws {
+        let widgetSync = MockWidgetSync()
+        let sut = WeatherViewModel(service: MockWeatherService(result: .success(.fixture)),
+                                   location: StubLocationProvider(.success(StubLocationProvider.rioDeJaneiro)),
+                                   widgetSync: widgetSync)
+
+        await sut.load()
+
+        let fetch = try #require(widgetSync.fetches.first)
+        #expect(widgetSync.fetches.count == 1)
+        #expect(fetch.snapshot == .fixture)
+        #expect(fetch.deviceCoordinate?.latitude == StubLocationProvider.rioDeJaneiro.coordinate.latitude)
+        #expect(fetch.deviceCoordinate?.longitude == StubLocationProvider.rioDeJaneiro.coordinate.longitude)
+    }
+
+    @Test func fallbackFetchDoesNotSyncACoordinate() async throws {
+        let widgetSync = MockWidgetSync()
+        let sut = WeatherViewModel(service: MockWeatherService(result: .success(.fixture)),
+                                   location: StubLocationProvider(.failure(.notAuthorized)),
+                                   widgetSync: widgetSync)
+
+        await sut.load()
+
+        let fetch = try #require(widgetSync.fetches.first)
+        #expect(fetch.snapshot == .fixture)
+        #expect(fetch.deviceCoordinate == nil)
+    }
+
+    @Test func failedFetchDoesNotTouchTheWidget() async {
+        let widgetSync = MockWidgetSync()
+        let sut = WeatherViewModel(service: MockWeatherService(result: .failure(.offline)),
+                                   location: StubLocationProvider(.success(StubLocationProvider.saoPaulo)),
+                                   widgetSync: widgetSync)
+
+        await sut.load()
+
+        #expect(widgetSync.fetches.isEmpty)
     }
 }
 

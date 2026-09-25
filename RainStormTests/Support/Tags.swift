@@ -14,4 +14,5 @@ extension Tag {
     @Tag static var networking: Self
     @Tag static var viewModel: Self
     @Tag static var snapshot: Self
+    @Tag static var widget: Self
 }

@@ -19,6 +19,15 @@ nonisolated enum WeatherFormatter {
                 .locale(locale))
     }
 
+    /// "16°C" em pt-BR, "61°" em en-US: sem casa decimal, para o gauge circular do widget.
+    static func compactTemperature(_ celsius: Double, locale: Locale) -> String {
+        Measurement(value: celsius, unit: UnitTemperature.celsius)
+            .formatted(.measurement(width: .narrow,
+                                    usage: .weather,
+                                    numberFormatStyle: .number.precision(.fractionLength(0)))
+                .locale(locale))
+    }
+
     /// "12 – 21 °C": faixa de mínima e máxima do dia.
     static func temperatureRange(min: Double, max: Double, locale: Locale) -> String {
         "\(temperature(min, locale: locale)) – \(temperature(max, locale: locale))"

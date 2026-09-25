@@ -39,12 +39,41 @@ targets:
     platform: iOS
     sources:
       - path: RainStorm
+      - path: Shared
+    dependencies:
+      - target: RainStormWidget   # embed em PlugIns/
+    entitlements:
+      path: RainStorm/RainStorm.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.guimagames.ios.RainStorm
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.guimagames.ios.RainStorm
         INFOPLIST_FILE: RainStorm/Info.plist
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ENABLE_PREVIEWS: YES
+
+  # Widget "Clima atual". Shared/ é compilado aqui e no app (módulos separados).
+  RainStormWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: RainStormWidget
+      - path: Shared
+    entitlements:
+      path: RainStormWidget/RainStormWidget.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.guimagames.ios.RainStorm
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.guimagames.ios.RainStorm.Widget
+        INFOPLIST_FILE: RainStormWidget/Info.plist
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: RainStorm
+        ENABLE_PREVIEWS: YES
+        SKIP_INSTALL: YES
 
   RainStormTests:
     type: bundle.unit-test
@@ -95,3 +124,17 @@ schemes:
         - path: Nightly.xctestplan
     archive:
       config: Release
+
+  # Roda o widget direto no simulador (pergunta o app hospedeiro na primeira vez).
+  RainStormWidget:
+    build:
+      targets:
+        RainStormWidget: all
+        RainStorm: all
+    run:
+      config: Debug
+      askForAppToLaunch: true
+      launchAutomaticallySubstyle: "2"
+      environmentVariables:
+        _XCWidgetKind: CurrentWeatherWidget
+        _XCWidgetFamily: medium

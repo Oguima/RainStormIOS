@@ -54,6 +54,8 @@ As fases 1 a 8 do roteiro (seção 8) foram implementadas: iOS 16.0, Swift 6 (st
 
 **Exceção documentada na auditoria:** issues de Dynamic Type nos cabeçalhos de seção da `List` (identificador `weather.sectionHeader`) são ignoradas no `testAccessibilityAudit`. Trata-se de falso positivo: o snapshot `loadedWithLargestAccessibilityTextSize` prova que eles escalam.
 
+**Widget (24/09/2026, seção 11):** extensão `RainStormWidget` com o card "Clima atual". Test Plan `RainStorm` completo (unit + snapshot + UI, pt-BR e en-US): ✅ 453 casos. `Nightly` (TSan): ✅ sem data race. iPhone SE 3 / iOS 18.2 sem snapshots: ✅, incluindo os 21 testes do widget e o deep link.
+
 **Pendente:** mensagens de erro por caso em `WeatherDataError+Presentation.swift` (hoje, texto genérico) e regressão manual em iPhone 8/X com iOS 16.
 
 ---
@@ -831,6 +833,8 @@ Cada fase é um PR independente, termina com o build verde e com os testes da fa
 | 6 | Etapa B: views SwiftUI em `UIHostingController` | Snapshots + previews | Médio |
 | 7 | Etapa C: `RainStormApp`, remover storyboards/`SceneDelegate`/`AppDelegate` | UI tests (XCUITest) | Médio |
 | 8 | Swift Charts, String Catalog, Privacy Manifest | Config `en-US` + audit de acessibilidade + nightly no CI | Baixo |
+| 9 | Widget "Clima atual" (seção 11): `Shared/`, App Group, `hourly` na API, extensão WidgetKit | Timeline builder, store, loader, sync, snapshots por família, deep link | Médio |
+
 > Com o SwiftUI, a seção 5.6 (UIKit moderno) **não entra no roteiro**.
 
 ---
@@ -844,6 +848,39 @@ Cada fase é um PR independente, termina com o build verde e com os testes da fa
 - **UI tests nunca acessam a rede real.** Sempre `-ui-testing` + cenário mockado; a Open-Meteo pode ficar lenta ou fora do ar e derrubar o CI.
 - **Mocks só no build DEBUG** (`#if DEBUG`), para não vazarem para a App Store.
 - **Remover código morto** (blocos comentados com a resposta da DarkSky, `WeekDayRepresentable` sem uso) antes da fase 3 para reduzir o ruído.
+
+---
+
+## 11. Widget "Clima atual" (WidgetKit)
+
+O primeiro card do app, na tela inicial (pequeno e médio) e na tela de bloqueio (circular, retangular e inline), todos disponíveis desde o iOS 16.
+
+### 11.1 Arquitetura
+
+- **`Shared/`** é compilado nos dois targets (XcodeGen: `sources: [RainStormWidget, Shared]`). Domínio, serviço, formatadores, cores e as views do widget ficam lá. Assim os snapshot tests do app renderizam exatamente o que a extensão desenha. Só o app tem `LocationProviding`, o ViewModel e as telas.
+- **Fluxo:** o app, depois de cada busca bem-sucedida, chama `WidgetSyncing.didFetch(_:deviceCoordinate:)`. Isso grava o snapshot e (só se a posição for real) a coordenada no App Group, e depois chama `WidgetCenter.reloadTimelines(ofKind:)`. O widget (`WeatherWidgetLoader`) busca na rede com essa coordenada. Se não houver rede, usa o cache, marcado como desatualizado. Se não houver cache, mostra "Abra o RainStorm…".
+- **Timeline:** `WeatherTimelineBuilder` é uma função pura. Gera uma entrada para agora e uma por hora futura do `hourly` (até 6), cada uma com a mínima e a máxima do dia daquela hora no fuso do local, e usa a política `.after(agora + 60 min)`. Se o iOS adiar a recarga, as entradas horárias mantêm o widget coerente por até 6 h.
+- **API:** `hourly=temperature_2m,weathercode,windspeed_10m,is_day&forecast_hours=12`. O `hourly` é decodificado com `decodeIfPresent` e validado com as mesmas regras do `daily`.
+
+### 11.2 Decisões e desvios em relação ao plano
+
+| Plano | Implementado | Motivo |
+|-------|-------------|--------|
+| `didFetch(snapshot, coordinate:, source:)` | `didFetch(_:deviceCoordinate:)` (`nil` = fallback) | `LocationSource` está no `WeatherViewModel`, que é só do app, e o `Shared` não pode referenciá-lo |
+| `XCUIApplication().open(url)` no UI test | `XCUIDevice.shared.system.open(url)` | `app.open` passava **sem** o `CFBundleURLTypes`: ele entrega a URL direto ao app. `system.open` roteia pelo esquema, como o SpringBoard |
+| Ícones do catálogo em todas as famílias | SF Symbols na tela de bloqueio (`WeatherCodeMapper.systemImageName`) | O `accessoryInline` só desenha SF Symbols |
+| "15,9 °C" em todas as famílias | "16°C" no gauge circular (`compactTemperature`) | Não cabe em 72 pt |
+| Layout fixo | `ViewThatFits` completo → compacto (pequeno e médio) | O snapshot em XXXL cortava a data e o vento |
+| Cache sem limite de idade | Cache válido por 12 h (`maxCacheAge`); depois, `.unavailable` | Revisão final: um dia sem rede mostraria o clima de ontem como se fosse atual |
+| "Agora" do cache = observação salva | "Agora" do cache = hora prevista mais recente ≤ agora | Revisão final: um cache das 08:00 mostrava a temperatura da manhã às 14:20 |
+| `URLSession.shared` (timeout de 60 s) | `URLSession.widget` (15 s por requisição, 20 s no total) | Revisão final: numa rede ruim a extensão podia ser encerrada antes do fallback para o cache |
+| — | `nonisolated(unsafe)` na captura do `completion` do provider | O SDK não marca o `completion` como `@Sendable`, e o WidgetKit aceita chamá-lo de qualquer thread |
+
+### 11.3 Verificação manual pendente
+
+- Adicionar os widgets pequeno, médio e de bloqueio no iPhone 17 / iOS 26.5 (scheme `RainStormWidget`) e conferir a paridade com o card, Dark Mode e pt-BR/en-US.
+- Modo avião: o widget deve mostrar o cache com "Atualizado às …", e o toque deve abrir o app e recarregar.
+- Primeiro build em aparelho: registrar o App Group `group.com.guimagames.ios.RainStorm` no Developer Portal.
 
 ---
 

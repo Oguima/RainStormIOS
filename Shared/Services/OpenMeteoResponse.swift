@@ -15,9 +15,10 @@ nonisolated struct OpenMeteoResponse: Decodable, Sendable {
     let timeZone: TimeZone
     let current: WeatherSnapshot.Current
     let forecast: [WeatherSnapshot.Day]
+    let hourly: [WeatherSnapshot.Hour]
 
     var snapshot: WeatherSnapshot {
-        WeatherSnapshot(timeZone: timeZone, current: current, forecast: forecast)
+        WeatherSnapshot(timeZone: timeZone, current: current, forecast: forecast, hourly: hourly)
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -27,6 +28,7 @@ nonisolated struct OpenMeteoResponse: Decodable, Sendable {
         case utcOffsetSeconds = "utc_offset_seconds"
         case currentWeather = "current_weather"
         case daily
+        case hourly
     }
 
     private struct RawCurrent: Decodable {
@@ -55,6 +57,22 @@ nonisolated struct OpenMeteoResponse: Decodable, Sendable {
             case temperatureMax = "temperature_2m_max"
             case weathercode
             case windspeedMax = "windspeed_10m_max"
+        }
+    }
+
+    private struct RawHourly: Decodable {
+        let time: [String]
+        let temperature: [Double]
+        let weathercode: [Int]
+        let windspeed: [Double]
+        let isDay: [Int]
+
+        enum CodingKeys: String, CodingKey {
+            case time
+            case temperature = "temperature_2m"
+            case weathercode
+            case windspeed = "windspeed_10m"
+            case isDay = "is_day"
         }
     }
 
@@ -101,6 +119,30 @@ nonisolated struct OpenMeteoResponse: Decodable, Sendable {
                                        temperatureMax: daily.temperatureMax[index],
                                        windSpeedMax: daily.windspeedMax[index],
                                        weatherCode: daily.weathercode[index])
+        }
+
+        // Opcional: respostas (e fixtures) anteriores ao widget não têm `hourly`.
+        guard let rawHourly = try container.decodeIfPresent(RawHourly.self, forKey: .hourly) else {
+            hourly = []
+            return
+        }
+        let hourCount = rawHourly.time.count
+        guard [rawHourly.temperature.count, rawHourly.weathercode.count,
+               rawHourly.windspeed.count, rawHourly.isDay.count].allSatisfy({ $0 == hourCount }) else {
+            throw DecodingError.dataCorruptedError(forKey: .hourly, in: container,
+                                                   debugDescription: "Hourly arrays have different lengths")
+        }
+        let dateTimeStrategy = Self.dateTimeStrategy(timeZone)
+        hourly = try rawHourly.time.indices.map { index in
+            guard let date = try? Date(rawHourly.time[index], strategy: dateTimeStrategy) else {
+                throw DecodingError.dataCorruptedError(forKey: .hourly, in: container,
+                                                       debugDescription: "Invalid time '\(rawHourly.time[index])'")
+            }
+            return WeatherSnapshot.Hour(date: date,
+                                        temperature: rawHourly.temperature[index],
+                                        windSpeed: rawHourly.windspeed[index],
+                                        weatherCode: rawHourly.weathercode[index],
+                                        isDay: rawHourly.isDay[index] != 0)
         }
     }
 

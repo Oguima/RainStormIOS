@@ -9,7 +9,7 @@
 	<key>NSPrivacyCollectedDataTypes</key>
 	<array>
 		<dict>
-			<!-- A coordenada (precisão de ~1 km) é enviada à Open-Meteo para buscar a previsão. -->
+			<!-- A última coordenada salva pelo app (precisão de ~1 km) é enviada à Open-Meteo. -->
 			<key>NSPrivacyCollectedDataType</key>
 			<string>NSPrivacyCollectedDataTypeCoarseLocation</string>
 			<key>NSPrivacyCollectedDataTypeLinked</key>
@@ -25,7 +25,7 @@
 	<key>NSPrivacyAccessedAPITypes</key>
 	<array>
 		<dict>
-			<!-- UserDefaults do App Group: última coordenada e último clima para o widget. -->
+			<!-- UserDefaults do App Group compartilhado com o app. -->
 			<key>NSPrivacyAccessedAPIType</key>
 			<string>NSPrivacyAccessedAPICategoryUserDefaults</string>
 			<key>NSPrivacyAccessedAPITypeReasons</key>

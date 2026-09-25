@@ -21,6 +21,16 @@
         }
       }
     },
+    "Current weather": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clima atual"
+          }
+        }
+      }
+    },
     "Day": {
       "localizations": {
         "pt-BR": {
@@ -241,6 +251,16 @@
         }
       }
     },
+    "Open RainStorm to load the weather": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abra o RainStorm para carregar o clima"
+          }
+        }
+      }
+    },
     "Open Settings": {
       "localizations": {
         "pt-BR": {
@@ -361,6 +381,16 @@
         }
       }
     },
+    "The current conditions and today's range, as in the app.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A condição atual e a mínima e máxima do dia, como no app."
+          }
+        }
+      }
+    },
     "Thunderstorm": {
       "localizations": {
         "pt-BR": {
@@ -387,6 +417,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tempestade com granizo fraco"
+          }
+        }
+      }
+    },
+    "today %@": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "hoje %@"
           }
         }
       }
@@ -421,12 +461,42 @@
         }
       }
     },
+    "Updated at %@": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atualizado às %@"
+          }
+        }
+      }
+    },
     "Violent rain showers": {
       "localizations": {
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
             "value": "Pancadas de chuva violentas"
+          }
+        }
+      }
+    },
+    "Wind %@": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vento %@"
+          }
+        }
+      }
+    },
+    "wind %@": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "vento %@"
           }
         }
       }

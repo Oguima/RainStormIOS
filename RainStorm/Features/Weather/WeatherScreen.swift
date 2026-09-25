@@ -21,6 +21,11 @@ struct WeatherScreen: View {
                 .navigationTitle("RainStorm")
         }
         .task { await viewModel.load() }
+        // Toque no widget: volta ao app e atualiza (o widget recebe o resultado via WidgetSyncing).
+        .onOpenURL { url in
+            guard url.scheme == DeepLink.weather.scheme else { return }
+            Task { await viewModel.load() }
+        }
     }
 
     @ViewBuilder

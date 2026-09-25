@@ -5,6 +5,7 @@
 
 import Foundation
 import Testing
+import UIKit
 @testable import RainStorm
 
 @Suite("WeatherCodeMapper", .tags(.domain))
@@ -25,6 +26,22 @@ struct WeatherCodeMapperTests {
     @Test func clearSkyAtNightUsesNightIcon() {
         #expect(WeatherCodeMapper.iconName(for: 0, isDay: false) == "clear-night")
         #expect(WeatherCodeMapper.iconName(for: 3, isDay: false) == "cloudy")
+    }
+
+    /// O `accessoryInline` do widget só desenha SF Symbols (os PNGs do catálogo somem).
+    @Test(arguments: [
+        (0, true, "sun.max.fill"), (0, false, "moon.stars.fill"), (2, true, "cloud.fill"),
+        (45, true, "cloud.fog.fill"), (61, true, "cloud.rain.fill"), (71, true, "cloud.snow.fill"),
+        (95, true, "cloud.bolt.rain.fill"), (1234, true, "sun.max.fill")
+    ])
+    func systemImageName(code: Int, isDay: Bool, expected: String) {
+        #expect(WeatherCodeMapper.systemImageName(for: code, isDay: isDay) == expected)
+    }
+
+    @Test(arguments: knownCodes)
+    func systemImageExists(code: Int) {
+        #expect(UIImage(systemName: WeatherCodeMapper.systemImageName(for: code, isDay: true)) != nil)
+        #expect(UIImage(systemName: WeatherCodeMapper.systemImageName(for: code, isDay: false)) != nil)
     }
 
     @Test(arguments: knownCodes)

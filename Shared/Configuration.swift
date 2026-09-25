@@ -20,6 +20,11 @@ nonisolated enum WeatherService {
     static let baseUrl = URL(string: "https://api.open-meteo.com/v1/forecast")!
 }
 
+nonisolated enum DeepLink {
+    /// Aberto pelo toque no widget (registrado em CFBundleURLTypes).
+    static let weather = URL(string: "rainstorm://weather")!
+}
+
 extension Color {
     /// Cor da marca RainStorm (antes `UIColor.Rainstorm.base`, #4FB8D4).
     /// No modo claro usa o mesmo matiz escurecido (#367D90): o original tem contraste 2,3:1

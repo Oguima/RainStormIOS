@@ -30,6 +30,12 @@ struct WeatherFormatterTests {
         #expect(WeatherFormatter.temperature(24.54, locale: .enUS).normalizingSpaces == "76.2°F")
     }
 
+    /// Gauge circular da tela de bloqueio: sem casa decimal, unidade estreita do idioma.
+    @Test func compactTemperature() {
+        #expect(WeatherFormatter.compactTemperature(15.9, locale: .ptBR).normalizingSpaces == "16°C")
+        #expect(WeatherFormatter.compactTemperature(15.9, locale: .enUS).normalizingSpaces == "61°")
+    }
+
     @Test func temperatureRangeJoinsMinAndMax() {
         #expect(WeatherFormatter.temperatureRange(min: 12.8, max: 21.1, locale: .ptBR).normalizingSpaces
                 == "12,8 °C – 21,1 °C")

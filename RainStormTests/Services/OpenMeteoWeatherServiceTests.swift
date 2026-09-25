@@ -28,6 +28,9 @@ struct OpenMeteoWeatherServiceTests {
         #expect(items.contains(URLQueryItem(name: "timezone", value: "auto")))
         #expect(items.contains(URLQueryItem(name: "daily",
                                             value: "temperature_2m_max,temperature_2m_min,weathercode,windspeed_10m_max")))
+        // Previsão horária para a timeline do widget (a resposta começa na hora atual).
+        #expect(items.contains(URLQueryItem(name: "hourly", value: "temperature_2m,weathercode,windspeed_10m,is_day")))
+        #expect(items.contains(URLQueryItem(name: "forecast_hours", value: "12")))
     }
 
     @Test func decodesSuccessfulResponse() async throws {

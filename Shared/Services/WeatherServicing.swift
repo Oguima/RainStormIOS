@@ -6,6 +6,17 @@
 import CoreLocation
 import Foundation
 
+extension URLSession {
+    /// Timeout curto para o widget: com o padrão de 60 s, uma rede ruim pode estourar o tempo
+    /// da extensão antes do fallback para o cache.
+    nonisolated static let widget: URLSession = {
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = 15
+        configuration.timeoutIntervalForResource = 20
+        return URLSession(configuration: configuration)
+    }()
+}
+
 protocol WeatherServicing {
     func forecast(for coordinate: CLLocationCoordinate2D) async throws(WeatherDataError) -> WeatherSnapshot
 }

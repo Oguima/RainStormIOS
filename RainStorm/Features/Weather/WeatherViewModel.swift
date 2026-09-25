@@ -29,10 +29,15 @@ final class WeatherViewModel: ObservableObject {
 
     private let service: any WeatherServicing
     private let location: any LocationProviding
+    private let widgetSync: any WidgetSyncing
 
-    init(service: any WeatherServicing, location: any LocationProviding, initialState: State = .loading) {
+    init(service: any WeatherServicing,
+         location: any LocationProviding,
+         widgetSync: any WidgetSyncing,
+         initialState: State = .loading) {
         self.service = service
         self.location = location
+        self.widgetSync = widgetSync
         self.state = initialState
     }
 
@@ -51,7 +56,10 @@ final class WeatherViewModel: ObservableObject {
         }
 
         do {
-            state = .loaded(try await service.forecast(for: coordinate), source)
+            let snapshot = try await service.forecast(for: coordinate)
+            state = .loaded(snapshot, source)
+            // O widget reaproveita o resultado; só uma posição real vira a coordenada dele.
+            widgetSync.didFetch(snapshot, deviceCoordinate: source == .device ? coordinate : nil)
         } catch {
             state = .failed(error)
         }

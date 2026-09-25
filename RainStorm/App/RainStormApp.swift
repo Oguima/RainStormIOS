@@ -27,14 +27,17 @@ enum AppDependencies {
             let location: any LocationProviding = arguments.contains("-real-location")
                 ? LocationProvider()
                 : StubLocationProvider(scenario: scenario)
-            return WeatherViewModel(service: MockWeatherService(scenario: scenario), location: location)
+            return WeatherViewModel(service: MockWeatherService(scenario: scenario), location: location,
+                                    widgetSync: MockWidgetSync())
         }
         // Unit tests rodam hospedados no app: não pedir localização nem acessar a rede.
         if NSClassFromString("XCTestCase") != nil {
             return WeatherViewModel(service: MockWeatherService(scenario: .loading),
-                                    location: StubLocationProvider(scenario: .loading))
+                                    location: StubLocationProvider(scenario: .loading),
+                                    widgetSync: MockWidgetSync())
         }
         #endif
-        return WeatherViewModel(service: OpenMeteoWeatherService(), location: LocationProvider())
+        return WeatherViewModel(service: OpenMeteoWeatherService(), location: LocationProvider(),
+                                widgetSync: WidgetCenterSync())
     }
 }

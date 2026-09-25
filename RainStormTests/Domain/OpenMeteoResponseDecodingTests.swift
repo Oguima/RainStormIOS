@@ -71,6 +71,40 @@ struct OpenMeteoResponseDecodingTests {
         }
     }
 
+    // MARK: - hourly (widget)
+
+    @Test func decodesHourlyForecast() throws {
+        let response = try decode("forecast_with_hourly")
+
+        #expect(response.hourly.count == 12)
+        let first = try #require(response.hourly.first)
+        let local = components(first.date, in: .saoPaulo)
+        #expect(local.day == 24 && local.hour == 21 && local.minute == 0)
+        #expect(first.temperature == 15.5)
+        #expect(first.windSpeed == 6.5)
+        #expect(first.weatherCode == 3)
+        #expect(first.isDay == false)
+        #expect(response.hourly.last?.isDay == true)
+        #expect(response.snapshot.hourly == response.hourly)
+    }
+
+    @Test func missingHourlyDecodesAsEmpty() throws {
+        #expect(try decode("forecast_success").hourly.isEmpty)
+    }
+
+    @Test(arguments: ["forecast_hourly_mismatched_arrays", "forecast_hourly_invalid_date"])
+    func invalidHourlyThrows(fixture: String) {
+        #expect(throws: DecodingError.self) {
+            try decode(fixture)
+        }
+    }
+
+    @Test func snapshotSurvivesCodableRoundTrip() throws {
+        let snapshot = try decode("forecast_with_hourly").snapshot
+        let data = try JSONEncoder().encode(snapshot)
+        #expect(try JSONDecoder().decode(WeatherSnapshot.self, from: data) == snapshot)
+    }
+
     @Test func snapshotCarriesTimeZoneAndForecast() throws {
         let response = try decode("forecast_success")
         let snapshot = response.snapshot
