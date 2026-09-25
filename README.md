@@ -128,15 +128,41 @@ O primeiro card do app (data, hora, ícone, temperatura, descrição e vento) na
 - Swift 6
 - [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`)
 
-## Projeto (XcodeGen)
+## Como compilar
 
-O `RainStorm.xcodeproj` é **gerado** a partir do `project.yml`. Depois de adicionar, remover ou mover arquivos, ou de mudar build settings:
+O `RainStorm.xcodeproj` é **gerado** a partir do `project.yml` pelo [XcodeGen](https://github.com/yonaskolb/XcodeGen). O repositório só traz os schemes e o `Package.resolved`: sem rodar `xcodegen`, a pasta existe, mas o Xcode não abre o projeto.
 
 ```bash
-xcodegen
+brew install xcodegen                              # uma vez por máquina
+git clone https://github.com/Oguima/RainStormIOS.git
+cd RainStormIOS
+xcodegen                                           # gera o RainStorm.xcodeproj
+open RainStorm.xcodeproj
 ```
 
-Não edite o `.xcodeproj` à mão: as alterações são perdidas na próxima geração.
+No Xcode, escolha o scheme:
+
+| Scheme | Para quê |
+|--------|----------|
+| `RainStorm` | App e testes (⌘U roda o Test Plan `RainStorm`) |
+| `RainStormWidget` | Roda o widget direto no simulador (o Xcode pergunta o app hospedeiro) |
+
+Pela linha de comando:
+
+```bash
+xcodebuild build -project RainStorm.xcodeproj -scheme RainStorm \
+  -destination 'platform=iOS Simulator,name=iPhone 17'
+```
+
+**Rode `xcodegen` de novo sempre que:**
+- fizer `git pull` ou trocar de branch (outra pessoa pode ter adicionado ou movido arquivos);
+- adicionar, remover ou mover arquivos (inclusive fixtures `.json` e imagens), ou mudar build settings no `project.yml`.
+
+Se o build falhar com *"cannot find … in scope"* ou *"file not found"* logo depois de um pull, quase sempre é o projeto desatualizado: rode `xcodegen`.
+
+Não edite o `.xcodeproj` pelo Xcode: as alterações somem na próxima geração. Mudanças de configuração vão no `project.yml`.
+
+**Aparelho físico:** no primeiro build, a assinatura automática precisa registrar o App Group `group.com.guimagames.ios.RainStorm` (usado pelo widget) no Developer Portal do time `HB54SB8ZZ9`. No simulador não é preciso.
 
 ## Testes
 
